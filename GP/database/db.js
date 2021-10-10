@@ -8,6 +8,13 @@ function DB() {
 			if(error) return reject(error);
 			resolve(db);
 		});
+	}).then((db) => {
+		return new Promise((resolve , reject) => {
+			db.get("PRAGMA foreign_keys = ON;" , [] , (error) => {
+				if(error) return reject(error);
+				return resolve(db); 
+			});
+		});
 	});
 }
 
@@ -55,7 +62,7 @@ DB.prototype.fetchMany = function(sql , params=[]) {
 DB.prototype.lastInsertedID = function() {
 	return this.db.then((db) => {
 		return this.fetchOne("SELECT last_insert_rowid() as id" , []).then(res => {
-			return res["id"];
+			return (res && "id" in res) ? res["id"] : null; 
 		});
 	});
 }

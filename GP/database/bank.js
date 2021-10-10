@@ -3,7 +3,6 @@ let Account = require("./account.js");
 
 function Bank() {
 	this.db = new DB();
-	this.init();
 }
 
 //-----------------------------------------------------------------------------
@@ -131,9 +130,8 @@ Bank.prototype.deleteAccount = function(account_no) {
 //-----------------------------------------------------------------------------
 
 Bank.prototype.getBalance = function(account_no) {
-	return this.db.fetchOne("SELECT balance FROM accounts WHERE account_no=?" , [account_no]).then((d) => {
-		if(d && ("balance" in d)) return d["balance"];
-		return null;
+	return this.db.fetchOne("SELECT balance FROM accounts WHERE account_no=?" , [account_no]).then((res) => {
+		return (res && "balance" in res) ? res["balance"] : null; 
 	});
 }
 
@@ -149,19 +147,54 @@ Bank.prototype.updateAccountBalance = function(account_no , balance) {
 //-----------------------------------------------------------------------------
 
 Bank.prototype.withdraw = function(account_no , amount) {
-	this.getBalance().then((balance) => {
-		if(amount > balance) return Promise.resolve(false);
-		return this.updateAccountBalance(account_no , (amount - balance)).then(() => true);
+	return this.getBalance(account_no).then((balance) => {
+		if((balance === null) || (balance < amount)) return Promise.resolve(false);
+		return this.updateAccountBalance(account_no , (balance - amount)).then(() => true);
 	});
 }
 
 //-----------------------------------------------------------------------------
 
+Bank.prototype.deposite = function(account_no , amount) {
+	return this.getBalance(account_no).then((balance) => {
+		if(balance === null) return Promise.resolve(false);
+		return this.updateAccountBalance(account_no , (balance + amount)).then(() => true);
+	});
+}
+
+//-----------------------------------------------------------------------------
+
+Bank.prototype.getUserTransactions = function(SSN) {
+	let sql = 
+	`SELECT transaction_type, transaction_date, amount 
+	 FROM transactions
+	 INNER JOIN accounts ON transactions.account_id = account_no
+	 INNER JOIN users ON accounts.user_id = users.SSN
+	 WHERE users.SSN=?`
+	return this.db.fetchMany(sql , [SSN]);
+}
+
+//-----------------------------------------------------------------------------
+
+Bank.prototype.addTransaction = function(type , amount , account_no) {
+	return this.db.exec("INSERT INTO transactions VALUES (NULL , ? , CURRENT_TIMESTAMP , ? , ?)" , 
+				[type , amount , account_no]
+	);
+}
+
+//-----------------------------------------------------------------------------
+
+
+
 let bank = new Bank();
 bank.init().then(() => {
-	// bank.deleteAccount(64453742);
-	// return bank.withdraw(931371383 , 4000);
-	return bank.getBalance(9313713831).then(console.log);
-	// bank.openAccount(223,32312.23243,"saving",4332).then(console.log);
-	// bank.createUser(223 , "jesus" , "christ" , "asdas@sasd.com" , 2143123 , "asd12" , "asd23ac#").then(console.log);
+	// bank.getUserTransactions()
+	// return bank.getUserTransactions(52341712).then(console.log);
+	// bank.deleteAccount(931371383);
+	// return bank.withdraw(928269760 , 2).then(console.log);
+	// return bank.deposite(928269760 , 2).then(console.log);
+	// return bank.getBalance(931371383).finally(console.log);
+	// return bank.addTransaction(1 , 5342 , 20282945).then(console.log);
+	// return bank.openAccount(24153427 ,32312.23243, "current" , 9641).then(console.log);
+	// bank.createUser(24153427 , "jesus" , "christ" , "asdas@sasd.com" , 2143123 , "asd12" , "asd23ac#")
 })

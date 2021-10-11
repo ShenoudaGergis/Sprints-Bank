@@ -69,7 +69,16 @@ DB.prototype.lastInsertedID = function() {
 
 //------------------------------------------------------------------------
 
-module.exports = DB;
+DB.prototype.affectedRows = function() {
+	return this.db.then((db) => {
+		return this.fetchOne("SELECT changes() as affected_rows" , []).then((res) => {
+			return res["affected_rows"];
+		});
+	});
+}
+
+//------------------------------------------------------------------------
+
+module.exports = (new DB());
 
 // let d = new DB();
-// d.exec("create table users (name TEXT);" , []).then(ret => console.log(ret) , err => console.log(err));

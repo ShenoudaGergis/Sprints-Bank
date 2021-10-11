@@ -1,5 +1,7 @@
 let validator = require("validator");
 
+//-----------------------------------------------------------------------------
+
 let mapper = {
 	"integer"    : {f : "isInt"            , p : []} , 
 	"float" 	 : {f : "isFloat"          , p : []} , 
@@ -12,7 +14,7 @@ let mapper = {
 	"currency"   : {f : "isCurrency"       , p : []}
 };
 
-//------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
 
 function validate(params) {
 	/*
@@ -31,6 +33,11 @@ function validate(params) {
 	return errors
 }
 
+//-----------------------------------------------------------------------------
+
+function checkParamsExistence(obj , ...keys) {
+	
+}
 
 module.exports = validate;
 

@@ -1,5 +1,4 @@
 let Card             = require("./card.js");
-let { getRandomInt } = require("../utils/misc.js");
 
 //-----------------------------------------------------------------------------
 

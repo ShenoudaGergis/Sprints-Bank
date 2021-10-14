@@ -1,0 +1,13 @@
+/user/auth      ==> create session
+/user/register  ==> create new account on the system
+/user/purge     ==> delete user account
+/user/update    ==> update user account
+
+--------------------------------------------------------------------------------
+
+/account/open           ==> open new account
+/account/close          ==> close an account
+/account/transactions   ==> list all account transactions
+/account/deposite       ==> deposite from account using card info or user token and account_no
+/account/withdraw       ==> deposite from account using card info or user token and account_no
+/account/transfer       ==> transfer money from account to another using card info

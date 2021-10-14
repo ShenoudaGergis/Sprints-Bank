@@ -1,0 +1,31 @@
+- users
+	- first_name
+	- last_name
+	- email
+	= SSN 
+	- phone
+	- address
+	- password
+
+- accounts
+	- balance
+	- type
+	= account_no
+	- user_id	(users.SSN)
+	- card_id	(cards.id)
+
+- cards
+	- network_type
+	= number
+	- expiry_date
+	- CVV
+	- PIN
+
+- transactions
+	= id
+	- transaction_type
+	- transaction_date
+	- amount
+	- account_id		(accounts.account_no)
+
+

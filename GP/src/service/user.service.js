@@ -5,14 +5,17 @@ let tokenService = require("./token.service.js");
 
 function createUser(SSN , first_name , last_name , email , phone , address , password) {
     return userModel.createUser(SSN , first_name , last_name , email , phone , address , password).then((rows) => {
-        if(rows == 0) return {
-            error   : 1 ,
-            message : "No user created" 
-        } 
-        else return {
-            error   : 0 ,
-            message : "User created successfully" 
-        } 
+        if(rows == 0) {
+            return {
+                error   : 1 ,
+                message : "No user created" 
+            } 
+        } else {
+            return {
+                error   : 0 ,
+                message : "User created successfully" 
+            } 
+        }
     });
 }
 
@@ -20,14 +23,18 @@ function createUser(SSN , first_name , last_name , email , phone , address , pas
 
 function updateUser(SSN , first_name , last_name , email , phone , address , password) {
     return userModel.updateUser(SSN , first_name , last_name , email , phone , address , password).then((rows) => {
-        if(rows == 0) return {
-            error   : 1 ,
-            message : "No user updated" 
-        } 
-        else return {
-            error   : 0 ,
-            message : "User updated successfully" 
-        }  
+        if(rows == 0) {
+            return {
+                error   : 1 ,
+                message : "No user updated" 
+            } 
+        }
+        else { 
+            return {
+                error   : 0 ,
+                message : "User updated successfully" 
+            }  
+        }
     })
 }
 
@@ -35,13 +42,17 @@ function updateUser(SSN , first_name , last_name , email , phone , address , pas
 
 function deleteUser(SSN) {
     return userModel.deleteUser(SSN).then((rows) => {
-        if(rows == 0) return {
-            error   : 1 ,
-            message : "No user delete"
+        if(rows == 0) {
+            return {
+                error   : 1 ,
+                message : "No user delete"
+            }
         }
-        else return {
-            error   : 0 ,
-            message : "User deleted successfully"
+        else {
+            return {
+                error   : 0 ,
+                message : "User deleted successfully"
+            }
         }
     })
 }
@@ -50,9 +61,11 @@ function deleteUser(SSN) {
 
 function createSession(email , password) {
     return userModel.getUserSSN(email , password).then((SSN) => {
-        if(SSN === null) return {
-            error   : 1 ,
-            message : "User not found"
+        if(SSN === null) {
+            return {
+                error   : 1 ,
+                message : "User not found"
+            }
         } 
         else {
             return tokenService.createEntry(SSN).then((res) => {

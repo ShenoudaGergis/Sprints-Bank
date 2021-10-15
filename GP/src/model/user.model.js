@@ -10,7 +10,7 @@ function User() {
 
 User.prototype.createUser = function(SSN , first_name , last_name , email , phone , address , password) {
 	return this.userExists(SSN).then((found) => {
-		if(found) return this.db.affectedRows();
+		if(found) return 0;
 		return this.db.exec(
 			`INSERT INTO users (first_name , last_name , email , SSN , phone , address , password)
 			 VALUES (? , ? , ? , ? , ? , ? , ?)

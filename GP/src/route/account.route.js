@@ -1,12 +1,14 @@
-let accountService = require("../service/account.service.js");
-let express        = require("express");
-let router         = express.Router();
+let accountService   = require("../service/account.service.js");
+let accountValidator = require("../middleware/validateaccount.middleware.js");
+let express          = require("express");
+let router           = express.Router();
 
 //-----------------------------------------------------------------------------
 
-router.post("/open" , (req , res , next) => {
+router.post("/open" , accountValidator.validateOpenAccount , (req , res , next) => {
     let inputs = req.user;
-    accountService.openAccount(inputs.SSN , inputs.balance , inputs.type , inputs.PIN).then((account) => {
+    let credentials = req.credentials;
+    accountService.openAccount(credentials["ssn"] , inputs["balance"] , inputs["type"] , inputs["pin"]).then((account) => {
         return res.json({
             error   : 0 ,
             account : account ,
@@ -19,9 +21,10 @@ router.post("/open" , (req , res , next) => {
 
 //-----------------------------------------------------------------------------
 
-router.delete("/close" , (req , res , next) => {
+router.delete("/close" , accountValidator.validateCloseAccount , (req , res , next) => {
     let inputs = req.user;
-    accountService.closeAccount(inputs.SSN , inputs.account_no).then(() => {
+    let credentials = req.credentials;
+    accountService.closeAccount(credentials["ssn"] , inputs["account_no"]).then(() => {
         return res.json({
             error   : 0 ,
             message : "Account closed successfully"
@@ -33,9 +36,10 @@ router.delete("/close" , (req , res , next) => {
 
 //-----------------------------------------------------------------------------
 
-router.get("/transaction" , (req , res , next) => {
+router.get("/transaction" , accountValidator.validateTransactionAccount , (req , res , next) => {
     let inputs = req.user;
-    accountService.getAccountTransaction(inputs.SSN , inputs.account_no).then((transactions) => {
+    let credentials = req.credentials;
+    accountService.getAccountTransaction(credentials["ssn"] , inputs["account_no"]).then((transactions) => {
         return res.json({
             error        : 0 ,
             transactions : transactions , 
@@ -45,5 +49,7 @@ router.get("/transaction" , (req , res , next) => {
         next(err);
     });
 })
+
+//-----------------------------------------------------------------------------
 
 module.exports = router;

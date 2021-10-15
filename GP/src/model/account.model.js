@@ -1,6 +1,7 @@
 let db            = require("../database/db.js");
 let accountEntity = require("./entity/account.js");
 let CardModel     = require("./card.model.js");
+let {getAccountTypeByNumber} = require("../utils/misc.js");
 
 //-----------------------------------------------------------------------------
 
@@ -16,7 +17,8 @@ Account.prototype.openAccount = function(SSN , balance , type , PIN) {
 	return this.card.registerCard(account["card"]).then((cardID) => {
 		return this.db.exec("INSERT INTO accounts (account_no , balance , account_type , card_id , user_id) VALUES (?,?,?,?,?)" , 
 					 [account["account_no"] , account["balance"] , account["type"] , cardID , SSN]).then(() => {
-						 return account 
+						account["type"] = getAccountTypeByNumber(account["type"]);
+						return account 
 					 })
 	})	
 }

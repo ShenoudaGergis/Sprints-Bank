@@ -1,5 +1,7 @@
 let db = require("./db.js");
 
+//-----------------------------------------------------------------------------
+
 function initTables() {
 	let tables = [
 		{
@@ -25,7 +27,7 @@ function initTables() {
   				        ON UPDATE CASCADE 
 				        ON DELETE CASCADE
 					FOREIGN KEY (card_id)
-   						REFERENCES cards(id)
+   						REFERENCES cards(number)
   				        ON UPDATE CASCADE 
 				        ON DELETE CASCADE);` , 
 			params: []

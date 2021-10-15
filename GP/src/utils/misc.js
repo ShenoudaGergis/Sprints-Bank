@@ -1,5 +1,6 @@
 const { nanoid } = require('nanoid');
 const moment     = require("moment");
+const account_types = require("../../config.js")["account_types"];
 
 //-----------------------------------------------------------------------------
 
@@ -22,4 +23,13 @@ function getTimestamp(m=null) {
     return moment().add(m , "minutes").format("YYYY-MM-DDTHH:mm:ss");
 }
 
-module.exports = {getRandomInt , getToken , getTimestamp};
+//-----------------------------------------------------------------------------
+
+function getAccountTypeByNumber(n) {
+    for(let type in account_types) {
+        if(account_types[type] == n) return type;
+    }
+    return "";
+}
+
+module.exports = {getRandomInt , getToken , getTimestamp , getAccountTypeByNumber};

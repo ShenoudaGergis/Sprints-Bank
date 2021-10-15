@@ -3,13 +3,13 @@ let tokenModel = new (require("../model/token.model.js"))();
 //-----------------------------------------------------------------------------
 
 function fetchSSN(req , res , next) {
-    let token = req.user["token"];
+    let token = req.credentials["token"];
     if(token === null) {
-        req.user["SSN"] = null;
+        req.credentials["ssn"] = null;
         return next();
     } else {
         tokenModel.getSSNfromToken(token).then((SSN) => {
-            req.user["SSN"] = SSN;
+            req.credentials["ssn"] = SSN;
             return next();    
         } , (err) => {
             next(err);

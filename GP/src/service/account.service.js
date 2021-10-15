@@ -38,9 +38,11 @@ function deposite(SSN , account_no , amount) {
 
 function withdrawByCard(number , CVV , PIN , amount) {
 	return accountModel.getAccountNoFromCard(number , CVV , PIN).then((res) => {
-		if(res === null) return {
-			error: 1 ,
-			message: "No corresponding account associated"
+		if(res === null) {
+			return {
+				error: 1 ,
+				message: "No corresponding account associated"
+			}
 		}
 		return withdraw(res["SSN"] , res["account_no"] , amount);
 	});
@@ -50,9 +52,11 @@ function withdrawByCard(number , CVV , PIN , amount) {
 
 function depositeByCard(number , CVV , PIN , amount) {
 	return accountModel.getAccountNoFromCard(number , CVV , PIN).then((res) => {
-		if(res === null) return {
-			error: 1 ,
-			message: "No corresponding account associated"
+		if(res === null) {
+			return {
+				error: 1 ,
+				message: "No corresponding account associated"
+			}
 		}
 		return deposite(res["SSN"] , res["account_no"] , amount);
 	});
@@ -87,14 +91,18 @@ function openAccount(SSN , balance , type , PIN) {
 
 function closeAccount(SSN , account_no) {
     return accountModel.closeAccount(SSN , account_no).then((rows) => {
-        if(rows == 1) return {
-            error   : 0 ,
-            message : "Account deleted successfully" ,    
-        }
-        else return {
-            error   : 1 ,
-            message : "No account deleted" ,
-        }
+        if(rows == 1) {
+			return {
+				error   : 0 ,
+				message : "Account deleted successfully" ,    
+			}
+		}
+        else {
+			return {
+				error   : 1 ,
+				message : "No account deleted" ,
+			}
+		}
     });
 }
 

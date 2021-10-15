@@ -24,5 +24,6 @@ function getTokenfromSSN(SSN) {
     return tokenModel.getTokenfromSSN(SSN);
 }
 
+//-----------------------------------------------------------------------------
 
-
+module.exports = { createEntry , removeEntry , getTokenfromSSN , getSSNfromToken };

@@ -1,6 +1,6 @@
 /user/auth      ==> create session
 /user/register  ==> create new account on the system
-/user/purge     ==> delete user account
+/user/delete     ==> delete user account
 /user/update    ==> update user account
 
 --------------------------------------------------------------------------------

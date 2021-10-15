@@ -9,8 +9,8 @@ function User() {
 //-----------------------------------------------------------------------------
 
 User.prototype.createUser = function(SSN , first_name , last_name , email , phone , address , password) {
-	return this.userExists().then((found) => {
-		if(found) return 0;
+	return this.userExists(SSN).then((found) => {
+		if(found) return this.db.affectedRows();
 		return this.db.exec(
 			`INSERT INTO users (first_name , last_name , email , SSN , phone , address , password)
 			 VALUES (? , ? , ? , ? , ? , ? , ?)
@@ -63,3 +63,5 @@ User.prototype.getUserSSN = function(email , password) {
 
 module.exports = User;
 
+// let user = new User();
+// user.userExists(324123123123).then(console.log);

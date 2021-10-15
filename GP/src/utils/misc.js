@@ -1,4 +1,5 @@
-const { nanoid } = require('nanoid')
+const { nanoid } = require('nanoid');
+const moment     = require("moment");
 
 //-----------------------------------------------------------------------------
 
@@ -14,4 +15,11 @@ function getToken() {
     return nanoid()
 }
 
-module.exports = {getRandomInt , getToken};
+//-----------------------------------------------------------------------------
+
+function getTimestamp(m=null) {
+    if(m === null) return moment().format("YYYY-MM-DDTHH:mm:ss");
+    return moment().add(m , "minutes").format("YYYY-MM-DDTHH:mm:ss");
+}
+
+module.exports = {getRandomInt , getToken , getTimestamp};

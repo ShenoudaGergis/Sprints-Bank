@@ -1,11 +1,22 @@
-let express    = require("express");
-let userRouter = require("./src/route/user.route.js"); 
-let {json}     = require("body-parser");
-let app        = express();
-let port       = 3000;
+let express       = require("express");
+let userRouter    = require("./src/route/user.route.js"); 
+let accountRouter = require("./src/route/account.route.js");
+let {json}        = require("body-parser");
+let fetchToken    = require("./src/middleware/tfetch.middleware.js");
+let fetchBody     = require("./src/middleware/bfetch.middleware.js");
+let fetchSSN      = require("./src/middleware/ssn.middleware.js");
+let serverError   = require("./src/middleware/error.middleware.js");
+let app           = express();
+let port          = 3000;
 
 app.use(json());
+app.use(fetchToken);
+app.use(fetchSSN);
+app.use(fetchBody);
+app.use((req , res , next) => {console.log(req.user); next()})
 app.use("/user" , userRouter);
+app.use("/account" , accountRouter);
+app.use(serverError);
 
 // app.post("/user/auth" , (req , res) => {
 //     let body = req.body;

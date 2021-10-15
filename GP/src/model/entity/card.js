@@ -1,6 +1,6 @@
 let moment           = require("moment");
 let generator        = require("creditcard-generator");
-let { getRandomInt } = require("../utils/misc.js");
+let { getRandomInt } = require("../../utils/misc.js");
 
 //-----------------------------------------------------------------------------
 

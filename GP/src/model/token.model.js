@@ -1,5 +1,6 @@
-let db           = require("../database/db.js");
-let { getToken } = require("../utils/misc.js");
+let db                          = require("../database/db.js");
+let { getToken , getTimestamp } = require("../utils/misc.js");
+let session_timeout             = require("../../config.js")["session_timeout"];
 
 //-----------------------------------------------------------------------------
 
@@ -13,10 +14,10 @@ Token.prototype.createEntry = function(SSN) {
     return this.getTokenfromSSN(SSN).then((token) => {
         if(token !== null) return { token , SSN };
         let uuid = getToken();
-        return this.db.exec("INSERT INTO tokens (token , user_id) VALUES (?,?)" , [uuid , SSN]).then(() => {
+        return this.db.exec("INSERT INTO tokens (token , user_id , expiry_date) VALUES (?,?,?)" , [uuid , SSN , getTimestamp(session_timeout)]).then(() => {
             return {
-                token: uuid ,
-                SSN  : SSN
+                token : uuid ,
+                SSN   : SSN
             }
         });
     })
@@ -31,15 +32,15 @@ Token.prototype.removeEntry = function(token) {
 //-----------------------------------------------------------------------------
 
 Token.prototype.getSSNfromToken = function(token) {
-    return this.db.fetchOne("SELECT SSN from tokens WHERE token=?" , [token]).then((res) => {
-        return (res) ? res["SSN"] : null; 
+    return this.db.fetchOne("SELECT user_id from tokens WHERE token=? AND expiry_date > ?" , [token , getTimestamp()]).then((res) => {
+        return (res) ? res["user_id"] : null; 
     })
 }
 
 //-----------------------------------------------------------------------------
 
 Token.prototype.getTokenfromSSN = function(SSN) {
-    return this.db.fetchOne("SELECT token from tokens WHERE SSN=?" , [SSN]).then((res) => {
+    return this.db.fetchOne("SELECT token from tokens WHERE user_id=? AND expiry_date > ?" , [SSN , getTimestamp()]).then((res) => {
         return (res) ? res["token"] : null; 
     })
 }
@@ -47,3 +48,8 @@ Token.prototype.getTokenfromSSN = function(SSN) {
 //-----------------------------------------------------------------------------
 
 module.exports = Token;
+
+let token = new Token();
+// token.createEntry(324123123123);
+// token.getSSNfromToken("7byCKyLm2xDr74XO8nrGh").then(console.log);
+// token.getSSNfromToken("7byCKyLm2xDr74XO8nrGh").then(console.log);

@@ -8,13 +8,14 @@ function Transaction() {
 
 //-----------------------------------------------------------------------------
 
-Transaction.prototype.getAccountTransactions = function(account_no) {
+Transaction.prototype.getAccountTransactions = function(SSN , account_no) {
 	let sql = 
 	`SELECT transaction_type, transaction_date, amount 
 		FROM transactions
-		WHERE account_id=?
+		INNER JOIN accounts ON transactions.account_id = accounts.account_no
+		WHERE account_id=? AND accounts.user_id=?
 	`
-	return this.db.fetchMany(sql , [account_no]).then((transactions) => {
+	return this.db.fetchMany(sql , [account_no , SSN]).then((transactions) => {
 		return transactions;
 	});
 }

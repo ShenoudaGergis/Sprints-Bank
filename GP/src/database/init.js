@@ -56,6 +56,7 @@ function initTables() {
 			sql: `CREATE TABLE IF NOT EXISTS tokens (
 					token TEXT PRIMARY KEY ,
 					user_id INTEGER NOT NULL , 
+					expiry_date TEXT NOT NULL ,
 					FOREIGN KEY (user_id)
    						REFERENCES users(SSN)
   				        ON UPDATE CASCADE 

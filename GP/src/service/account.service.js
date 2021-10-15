@@ -4,7 +4,7 @@ let transactionModel = new (require("../model/transaction.model.js"))();
 //-----------------------------------------------------------------------------
 
 function withdraw(SSN , account_no , amount) {
-	return  accountModel.getAccountBalance(SSN , account_no).then((balance) => {
+	return accountModel.getAccountBalance(SSN , account_no).then((balance) => {
 		if(balance === null) return {error: 1 , message: "No account found"};
 		if(balance["balance"] < amount) return {error: 1 , message: "Not enough balance"};
 		return accountModel.updateAccountBalance(SSN , account_no , (balance - amount)).then(() => {
@@ -15,10 +15,7 @@ function withdraw(SSN , account_no , amount) {
 				balance: (balance - amount)
 			}));
 		});
-	} , () => ({
-        error   : 1 ,
-        message : "Internal server error"
-    }));
+	});
 }
 
 //-----------------------------------------------------------------------------
@@ -34,10 +31,7 @@ function deposite(SSN , account_no , amount) {
 					balance: (balance + amount)
 				}));
 		});
-	} , () => ({
-        error   : 1 ,
-        message : "Internal server error"
-    }));
+	});
 }
 
 //-----------------------------------------------------------------------------
@@ -49,10 +43,7 @@ function withdrawByCard(number , CVV , PIN , amount) {
 			message: "No corresponding account associated"
 		}
 		return withdraw(res["SSN"] , res["account_no"] , amount);
-	} , () => ({
-        error   : 1 ,
-        message : "Internal server error"
-    }))
+	});
 }
 
 //-----------------------------------------------------------------------------
@@ -64,10 +55,7 @@ function depositeByCard(number , CVV , PIN , amount) {
 			message: "No corresponding account associated"
 		}
 		return deposite(res["SSN"] , res["account_no"] , amount);
-	} , () => ({
-        error   : 1 ,
-        message : "Internal server error"
-    }))
+	});
 }
 
 //-----------------------------------------------------------------------------
@@ -75,12 +63,14 @@ function depositeByCard(number , CVV , PIN , amount) {
 function transfer(source , destination , amount) {
     return withdrawByCard(source.number , source.CVV , source.PIN , amount).then((result) => {
         if(result["error"] === 0) {
-            return depositeByCard(destination.number , destination.CVV , destination.PIN , amount);
+            return depositeByCard(destination.number , destination.CVV , destination.PIN , amount).then(() => {
+                return {
+                    error   : 0 ,
+                    message : "Transfer succeeded"
+                }
+            })
         } else return result;
-    } , () => ({
-        error   : 1 ,
-        message : "Internal server error"
-    }))
+    })
 }
 
 //-----------------------------------------------------------------------------
@@ -90,10 +80,7 @@ function openAccount(SSN , balance , type , PIN) {
         error   : 0 ,
         message : "Account created successfully" ,
         account : account
-    }) , () => ({
-        error   : 1 ,
-        message : "Internal server error"
-    }))
+    }));
 }
 
 //-----------------------------------------------------------------------------
@@ -106,15 +93,17 @@ function closeAccount(SSN , account_no) {
         }
         else return {
             error   : 1 ,
-            message : "No account matched" ,
+            message : "No account deleted" ,
         }
-    } , () => ({
-        error   : 1 ,
-        message : "Internal server error"
-    }))
+    });
 }
 
 //-----------------------------------------------------------------------------
 
+function getAccountTransaction(SSN , account_no) {
+    return transactionModel.getAccountTransactions(SSN , account_no);
+}
 
-module.exports = { withdraw , deposite , withdrawByCard , depositeByCard , transfer };
+//-----------------------------------------------------------------------------
+
+module.exports = { withdraw , deposite , withdrawByCard , depositeByCard , openAccount , closeAccount , transfer , getAccountTransaction };

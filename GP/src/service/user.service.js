@@ -1,4 +1,5 @@
-let userModel = new (require("../model/user.model.js"))();
+let userModel    = new (require("../model/user.model.js"))();
+let tokenService = require("./token.service.js");
 
 //-----------------------------------------------------------------------------
 
@@ -6,16 +7,13 @@ function createUser(SSN , first_name , last_name , email , phone , address , pas
     return userModel.createUser(SSN , first_name , last_name , email , phone , address , password).then((rows) => {
         if(rows == 0) return {
             error   : 1 ,
-            message : "Can't create user" 
+            message : "No user created" 
         } 
         else return {
             error   : 0 ,
             message : "User created successfully" 
         } 
-    } , (err) => ({
-        error   : 1 ,
-        message : "Internal server error"
-    }));
+    });
 }
 
 //-----------------------------------------------------------------------------
@@ -24,16 +22,13 @@ function updateUser(SSN , first_name , last_name , email , phone , address , pas
     return userModel.updateUser(SSN , first_name , last_name , email , phone , address , password).then((rows) => {
         if(rows == 0) return {
             error   : 1 ,
-            message : "Can't update user" 
+            message : "No user updated" 
         } 
         else return {
             error   : 0 ,
             message : "User updated successfully" 
         }  
-    } , () => ({
-        error   : 1 ,
-        message : "Internal server error"
-    }))
+    })
 }
 
 //-----------------------------------------------------------------------------
@@ -42,20 +37,31 @@ function deleteUser(SSN) {
     return userModel.deleteUser(SSN).then((rows) => {
         if(rows == 0) return {
             error   : 1 ,
-            message : "Can't delete user"
+            message : "No user delete"
         }
         else return {
             error   : 0 ,
             message : "User deleted successfully"
         }
-    } , () => ({
-        error   : 1 ,
-        message : "Internal server error"
-    }))
+    })
 }
 
 //-----------------------------------------------------------------------------
 
+function createSession(email , password) {
+    return userModel.getUserSSN(email , password).then((SSN) => {
+        if(SSN === null) return {
+            error   : 1 ,
+            message : "User not found"
+        } 
+        else {
+            return tokenService.createEntry(SSN).then((res) => {
+                return { error: 0 , token : res["token"] , message : "Session created successfully" };
+            })
+        }
+    });
+}
 
+//-----------------------------------------------------------------------------
 
-module.exports = { createUser , updateUser , deleteUser };
+module.exports = { createUser , updateUser , deleteUser , createSession };

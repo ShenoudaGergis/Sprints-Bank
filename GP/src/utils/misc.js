@@ -1,6 +1,6 @@
 const { nanoid } = require('nanoid');
 const moment     = require("moment");
-const account_types = require("../../config.js")["account_types"];
+const {account_types , currency_after_point} = require("../../config.js");
 
 //-----------------------------------------------------------------------------
 
@@ -32,4 +32,28 @@ function getAccountTypeByNumber(n) {
     return "";
 }
 
-module.exports = {getRandomInt , getToken , getTimestamp , getAccountTypeByNumber};
+//-----------------------------------------------------------------------------
+
+function getNumOfDigits(n) {
+    return n.toString().length;
+}
+
+//-----------------------------------------------------------------------------
+
+function isDigitPlace(n , p , v) {
+    return n.toString()[p] == v;
+}
+
+//-----------------------------------------------------------------------------
+
+function sumOperands(...numbers) {
+    let sum = 0;
+    numbers.forEach((n) => {
+        sum += parseFloat(n);
+    });
+    return (sum.toFixed(currency_after_point[currency_after_point.length - 1]));
+}
+
+//-----------------------------------------------------------------------------
+
+module.exports = {getRandomInt , getToken , getTimestamp , getAccountTypeByNumber , getNumOfDigits , isDigitPlace , sumOperands};

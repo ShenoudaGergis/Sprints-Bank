@@ -12,12 +12,12 @@ function initTables() {
 					email TEXT NOT NULL , 
 					password TEXT NOT NULL ,
 					phone INTEGER NOT NULL , 
-					address TEXT);` , 
+					address TEXT NOT NULL);` , 
 			params: []
 		} ,
 		{
 			sql: `CREATE TABLE IF NOT EXISTS accounts (
-					account_no TEXT PRIMARY KEY , 
+					account_no INTEGER PRIMARY KEY , 
 					balance REAL DEFAULT 0.0 , 
 					account_type INTEGER NOT NULL , 
 					card_id INTEGER NOT NULL , 
@@ -47,7 +47,7 @@ function initTables() {
 					transaction_type INTEGER NOT NULL , 
 					transaction_date TEXT DEFAULT CURRENT_TIMESTAMP , 
 					amount REAL NOT NULL ,
-					account_id TEXT NOT NULL ,
+					account_id INTEGER NOT NULL ,
 					FOREIGN KEY (account_id)
    						REFERENCES accounts(account_no)
   				        ON UPDATE CASCADE 

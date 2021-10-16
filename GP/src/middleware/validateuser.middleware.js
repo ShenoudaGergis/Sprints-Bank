@@ -5,13 +5,13 @@ let validate = require("../utils/validate.js");
 function validateRegisterUser(req , res , next) {
     let inputs = req.user;
     let result = validate({
-        "SSN"        : {value : inputs["ssn"] , check : "ssn"  , args : []} ,
-        "email"      : {value : inputs["email"]  , check : "email" , args : []} ,
-        "password"   : {value : inputs["password"] , check : "password" , args : []} ,
-        "first_name" : {value : inputs["first_name"] , check : "name" , args : []} ,
-        "last_name"  : {value : inputs["last_name"] , check : "name" , args : []} ,
-        "phone"      : {value : inputs["phone"] , check : "phone" , args : ["ar-EG"]} ,
-        "address"    : {value : inputs["address"] , check : "address" , args : []} 
+        "SSN"        : {value : inputs["ssn"]        , check : "ssn"} ,
+        "email"      : {value : inputs["email"]      , check : "email"} ,
+        "password"   : {value : inputs["password"]   , check : "password"} ,
+        "first_name" : {value : inputs["first_name"] , check : "name"} ,
+        "last_name"  : {value : inputs["last_name"]  , check : "name"} ,
+        "phone"      : {value : inputs["phone"]      , check : "phone"} ,
+        "address"    : {value : inputs["address"]    , check : "address"} 
     }); 
     if(result.length !== 0) {
         return res.json({
@@ -35,12 +35,12 @@ function validateUpdateUser(req , res , next) {
         });
     }
     let result = validate({
-        "email"      : {value : inputs["email"]  , check : "email" , args : []} ,
-        "password"   : {value : inputs["password"] , check : "password" , args : []} ,
-        "first_name" : {value : inputs["first_name"] , check : "name" , args : []} ,
-        "last_name"  : {value : inputs["last_name"] , check : "name" , args : []} ,
-        "phone"      : {value : inputs["phone"] , check : "phone" , args : ["ar-EG"]} ,
-        "address"    : {value : inputs["address"] , check : "address" , args : []} 
+        "email"      : {value : inputs["email"]      , check : "email"} ,
+        "password"   : {value : inputs["password"]   , check : "password"} ,
+        "first_name" : {value : inputs["first_name"] , check : "name"} ,
+        "last_name"  : {value : inputs["last_name"]  , check : "name"} ,
+        "phone"      : {value : inputs["phone"]      , check : "phone"} ,
+        "address"    : {value : inputs["address"]    , check : "address"} 
     }); 
     if(result.length !== 0) {
         return res.json({
@@ -69,8 +69,8 @@ function validateDeleteUser(req , res , next) {
 function validateAuthUser(req , res , next) {
     let inputs = req.user;
     let result = validate({
-        "email"    : {value : inputs["email"]  ,   check : "email" , args : []} ,
-        "password" : {value : inputs["password"] , check : "password" , args : []} ,
+        "email"    : {value : inputs["email"]    , check : "email"} ,
+        "password" : {value : inputs["password"] , check : "password"} ,
     }); 
     if(result.length !== 0) {
         return res.json({

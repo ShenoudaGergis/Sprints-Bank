@@ -12,9 +12,9 @@ function validateOpenAccount(req , res , next) {
         });
     }
     let result = validate({
-        "balance" : {value : inputs["balance"]  , check : "currency" , args : [{digits_after_decimal: [0,1,2,3,4,5]}]} ,
-        "type"    : {value : inputs["type"] , check     : "account_type" , args : []} ,
-        "pin"     : {value : inputs["pin"] , check      : "pin" , args : []} ,
+        "balance" : {value : inputs["balance"]  , check : "currency"} ,
+        "type"    : {value : inputs["type"]     , check : "account_type"} ,
+        "pin"     : {value : inputs["pin"]      , check : "pin"} ,
    }); 
     if(result.length !== 0) {
         return res.json({
@@ -38,7 +38,7 @@ function validateCloseAccount(req , res , next) {
         });
     }
     let result = validate({
-        "account_no" : {value : inputs["account_no"]  , check : "account_no" , args : []} ,
+        "account_no" : {value : inputs["account_no"]  , check : "account_no"} ,
    }); 
     if(result.length !== 0) {
         return res.json({
@@ -62,7 +62,7 @@ function validateTransactionAccount(req , res , next) {
         });
     }
     let result = validate({
-        "account_no" : {value : inputs["account_no"]  , check : "account_no" , args : []} ,
+        "account_no" : {value : inputs["account_no"]  , check : "account_no"} ,
     }); 
     if(result.length !== 0) {
         return res.json({
@@ -86,8 +86,8 @@ function validateBankingAccount(req ,res , next) {
         });
     }
     let result = validate({
-        "account_no" : {value : inputs["account_no"]  , check : "account_no" , args : []} ,
-        "amount"     : {value : inputs["amount"]  , check : "currency" , args : [{digits_after_decimal: [0,1,2,3,4,5]}]} ,
+        "account_no" : {value : inputs["account_no"]  , check : "account_no"} ,
+        "amount"     : {value : inputs["amount"]      , check : "currency"} ,
     }); 
     if(result.length !== 0) {
         return res.json({
@@ -103,10 +103,10 @@ function validateBankingAccount(req ,res , next) {
 function validateBankingCard(req , res , next) {
     let inputs      = req.user;
     let result = validate({
-        "number" : {value : inputs["number"]  , check : "creditCard" , args : []} ,
-        "cvv"    : {value : inputs["cvv"]  , check : "cvv" , args : []} ,
-        "pin"    : {value : inputs["pin"]  , check : "pin" , args : []} ,
-        "amount" : {value : inputs["amount"]  , check : "currency" , args : [{digits_after_decimal: [0,1,2,3,4,5]}]} ,
+        "number" : {value : inputs["number"]  , check : "creditCard"} ,
+        "cvv"    : {value : inputs["cvv"]     , check : "cvv"} ,
+        "pin"    : {value : inputs["pin"]     , check : "pin"} ,
+        "amount" : {value : inputs["amount"]  , check : "currency"} ,
     }); 
     if(result.length !== 0) {
         return res.json({

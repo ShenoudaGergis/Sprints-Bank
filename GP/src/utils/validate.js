@@ -1,68 +1,77 @@
-let validator     = require("validator");
-let account_types = require("../../config.js")["account_types"];
+let validator        = require("validator");
+let configs          = require("../../config.js");
+let {getNumOfDigits} = require("../utils/misc.js");
 
 //-----------------------------------------------------------------------------
 
 validator["isSSN"] = function(ssn) {
-	return (validator.isLength(ssn , {min: 16 , max: 16})) && (validator.isInt(ssn));
+	return (validator.isInt(ssn) && getNumOfDigits(+ssn) === configs.ssn_length);
 }
 
 //-----------------------------------------------------------------------------
 
 validator["isPIN"] = function(PIN) {
-	return (validator.isLength(PIN , {min: 4 , max: 4})) && (validator.isInt(PIN));
+	return (validator.isInt(PIN) && getNumOfDigits(+PIN) === configs.pin_length);
 }
 
 //-----------------------------------------------------------------------------
 
-validator["isCVV"] = function(PIN) {
-	return (validator.isLength(PIN , {min: 4 , max: 4})) && (validator.isInt(PIN));
+validator["isCVV"] = function(CVV) {
+	return (validator.isInt(CVV) && getNumOfDigits(+CVV) === configs.cvv_length);
 }
 
 //-----------------------------------------------------------------------------
 
 validator["isAccountNumber"] = function(account_no) {
-	return (validator.isLength(account_no , {min: 9 , max: 9})) && (validator.isInt(account_no));
+	return (validator.isInt(account_no) && getNumOfDigits(+account_no) === configs.account_number_length);
 }
 
 //-----------------------------------------------------------------------------
 
 validator["isAccountType"] = function(type) {
 	type = type.toLocaleLowerCase();
-	return (account_types[type]) ? true : false;
+	return (configs.account_types[type]) ? true : false;
 }
 
 //-----------------------------------------------------------------------------
 
 validator["isName"] = function(name) {
-	return (validator.isLength(name , {min: 5 , max: 15})) && (validator.isAlpha(name));
+	return (validator.isLength(name , {min: configs.name_length.min , max: configs.name_length.max})) && (validator.isAlpha(name));
 }
 
 //-----------------------------------------------------------------------------
 
 validator["isAddress"] = function(name) {
-	return validator.isLength(name , {min: 5 , max: 25});
+	return validator.isLength(name , {min: configs.address_length.min , max: configs.address_length.max});
 }
 
 //-----------------------------------------------------------------------------
 
+validator["_isCurrency"] = function(currency) {
+	return validator.isCurrency(currency , {digits_after_decimal: configs.currency_after_point});
+}
+
+//-----------------------------------------------------------------------------
+
+validator["_isMobilePhone"] = function(phone) {
+	return validator.isMobilePhone(phone , configs.phone_local);
+}
+
+//-----------------------------------------------------------------------------
 
 let mapper = {
-	"integer"    : "isInt" ,
-	"length"     : "isLength" ,
-	"ssn"        : "isSSN" ,
-	"float" 	 : "isFloat" , 
-	"email" 	 : "isEmail" , 
-	"name"       : "isName" ,
-	"phone"      : "isMobilePhone" ,
-	"password"   : "isStrongPassword" , 
-	"creditCard" : "isCreditCard" ,
-	"address"    : "isAddress" ,
-	"currency"   : "isCurrency",
-	"pin"        : "isPIN" ,
-	"cvv"        : "isCVV" ,
+	"ssn"          : "isSSN" ,
+	"email" 	   : "isEmail" ,
+	"name"         : "isName" ,
+	"phone"        : "_isMobilePhone" ,
+	"password"     : "isStrongPassword" , 
+	"creditCard"   : "isCreditCard" ,
+	"address"      : "isAddress" ,
+	"currency"     : "_isCurrency",
+	"pin"          : "isPIN" ,
+	"cvv"          : "isCVV" ,
 	"account_type" : "isAccountType" ,
-	"account_no" : "isAccountNumber"
+	"account_no"   : "isAccountNumber"
 };
 
 //-----------------------------------------------------------------------------
@@ -70,7 +79,7 @@ let mapper = {
 function validate(params) {
 	/*
 		{
-			"param" : {value : v , check : integer , args=[]}
+			"param" : {value : v , check : integer}
 		}
 	*/
 	let errors = [];
@@ -78,10 +87,8 @@ function validate(params) {
 		let value = params[p]["value"];
 		if(!((typeof value === "string") || (typeof value === "number"))) {errors.push(p);continue;}
 		value += "";
-				
 		let check = params[p]["check"];
-		let args  = params[p]["args"];
-		if(!(validator[mapper[check]](value , ...args))) errors.push(p);
+		if(!(validator[mapper[check]](value))) errors.push(p);
 	}
 	return errors
 }
@@ -92,8 +99,8 @@ function validate(params) {
 module.exports = validate;
 
 // console.log(validate({
-// 	"SSN"      : {value : "cccccccccccccccc" , check : "ssn"  , args : [{min:16 , max:16}]} ,
-	// "balance"      : {value : "3.232233" , check : "currency" , args : [{digits_after_decimal: [0,1,2,3,4,5]}]} ,
-// 	"account" : {value : "saVing" , check : "account" , args : []} ,
+	// "password"      : {value : "sdaEAS23#" , check : "password"} ,
+	// "account_no"      : {value : "114615032" , check : "account_no"} ,
+	// "phone" : {value : "01025564492" , check : "phone"} ,
 // }));
 

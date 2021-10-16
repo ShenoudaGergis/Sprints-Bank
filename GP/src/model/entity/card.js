@@ -1,6 +1,6 @@
 let moment           = require("moment");
 let generator        = require("creditcard-generator");
-let { getRandomInt } = require("../../utils/misc.js");
+let { getRandomInt , isDigitPlace } = require("../../utils/misc.js");
 
 //-----------------------------------------------------------------------------
 
@@ -25,7 +25,9 @@ Card.prototype.getCVV = function() {
 //-----------------------------------------------------------------------------
 
 Card.prototype.getNumber = function() {
-    return generator.GenCC(this.network)[0];
+    let r = null;
+    while(isDigitPlace((r = generator.GenCC(this.network)[0]) , 7 , 0)) {}
+    return r;
 }
 
 //-----------------------------------------------------------------------------
@@ -39,5 +41,7 @@ Card.prototype.generate = function() {
         "PIN"          : this.PIN
     };
 }
+
+//-----------------------------------------------------------------------------
 
 module.exports = Card;

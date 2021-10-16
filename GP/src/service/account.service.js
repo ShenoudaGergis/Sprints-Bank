@@ -1,5 +1,6 @@
 let accountModel     = new (require("../model/account.model.js"))();
 let transactionModel = new (require("../model/transaction.model.js"))();
+let {sumOperands}    = require("../utils/misc.js");
 
 //-----------------------------------------------------------------------------
 
@@ -7,12 +8,12 @@ function withdraw(SSN , account_no , amount) {
 	return accountModel.getAccountBalance(SSN , account_no).then((balance) => {
 		if(balance === null) return {error: 1 , message: "No account found"};
 		if(balance < amount) return {error: 1 , message: "Not enough balance"};
-		return accountModel.updateAccountBalance(SSN , account_no , (balance - amount)).then(() => {
+		return accountModel.updateAccountBalance(SSN , account_no , sumOperands(balance , -amount)).then(() => {
 			return transactionModel.createAccountTransaction(-1 , amount , account_no).then(() => 
 			({
 				error  : 0 ,
 				message: "Transaction succeeded" , 
-				balance: (balance - amount)
+				balance: sumOperands(balance , -amount)
 			}));
 		});
 	});
@@ -23,12 +24,12 @@ function withdraw(SSN , account_no , amount) {
 function deposite(SSN , account_no , amount) {
 	return accountModel.getAccountBalance(SSN , account_no).then((balance) => {
 		if(balance === null) return {error: 1 , message: "No account found"};
-		return accountModel.updateAccountBalance(SSN , account_no , (balance + amount)).then(() => {
+		return accountModel.updateAccountBalance(SSN , account_no , sumOperands(balance , amount)).then(() => {
 			return transactionModel.createAccountTransaction(1 , amount , account_no).then(() => 
 				({
 					error  : 0 ,
 					message: "Transaction succeeded" , 
-					balance: (balance + amount)
+					balance: sumOperands(balance , amount)
 				}));
 		});
 	});

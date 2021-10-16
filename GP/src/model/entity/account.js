@@ -26,4 +26,6 @@ Account.prototype.generate = function() {
     };
 }
 
+//-----------------------------------------------------------------------------
+
 module.exports = Account;

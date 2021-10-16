@@ -13,6 +13,7 @@ function Account() {
 //-----------------------------------------------------------------------------
 
 Account.prototype.openAccount = function(SSN , balance , type , PIN) {
+	type = type.toLocaleLowerCase();
 	let account = (new accountEntity(balance , type , PIN)).generate();
 	return this.card.registerCard(account["card"]).then((cardID) => {
 		return this.db.exec("INSERT INTO accounts (account_no , balance , account_type , card_id , user_id) VALUES (?,?,?,?,?)" , 
@@ -79,5 +80,7 @@ Account.prototype.getAccountNoFromCard = function(number , CVV , PIN) {
 		return (res) ? res : null;
 	})
 }
+
+//-----------------------------------------------------------------------------
 
 module.exports = Account;

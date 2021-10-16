@@ -9,7 +9,7 @@ function User() {
 //-----------------------------------------------------------------------------
 
 User.prototype.createUser = function(SSN , first_name , last_name , email , phone , address , password) {
-	return this.userExists(SSN).then((found) => {
+	return this.userExists(SSN , email).then((found) => {
 		if(found) return 0;
 		return this.db.exec(
 			`INSERT INTO users (first_name , last_name , email , SSN , phone , address , password)
@@ -44,8 +44,8 @@ User.prototype.deleteUser = function(SSN) {
 
 //-----------------------------------------------------------------------------
 
-User.prototype.userExists = function(SSN) {
-	return this.db.fetchOne("SELECT count(1) AS c FROM users WHERE SSN=?" , [SSN]).then((res) => {
+User.prototype.userExists = function(SSN , email) {
+	return this.db.fetchOne("SELECT count(1) AS c FROM users WHERE SSN=? OR email=?" , [SSN , email]).then((res) => {
 		return res["c"] == 1;
 	})
 }

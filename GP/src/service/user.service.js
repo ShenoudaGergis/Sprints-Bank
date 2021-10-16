@@ -8,7 +8,7 @@ function createUser(SSN , first_name , last_name , email , phone , address , pas
         if(rows == 0) {
             return {
                 error   : 1 ,
-                message : "No user created" 
+                message : "No user created, SSN or email is found" 
             } 
         } else {
             return {

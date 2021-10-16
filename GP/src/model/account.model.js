@@ -70,9 +70,9 @@ Account.prototype.updateAccountBalance = function(SSN , account_no , balance) {
 
 Account.prototype.getAccountNoFromCard = function(number , CVV , PIN) {
 	let sql = 
-	`SELECT account_no , SSN
+	`SELECT account_no , user_id
 	 FROM accounts
-	 INNER JOIN cards ON cards.id = accounts.card_id
+	 INNER JOIN cards ON cards.number = accounts.card_id
 	 WHERE cards.number=? AND cards.CVV=? AND cards.PIN=? 
 	`;
 	return this.db.fetchOne(sql , [number , CVV , PIN]).then((res) => {

@@ -9,11 +9,7 @@ router.post("/open" , accountValidator.validateOpenAccount , (req , res , next) 
     let inputs = req.user;
     let credentials = req.credentials;
     accountService.openAccount(credentials["ssn"] , inputs["balance"] , inputs["type"] , inputs["pin"]).then((account) => {
-        return res.json({
-            error   : 0 ,
-            account : account ,
-            message : "Account created successfully"
-        });
+        return res.json(account);
     } , (err) => {
         next(err);
     });
@@ -24,11 +20,8 @@ router.post("/open" , accountValidator.validateOpenAccount , (req , res , next) 
 router.delete("/close" , accountValidator.validateCloseAccount , (req , res , next) => {
     let inputs = req.user;
     let credentials = req.credentials;
-    accountService.closeAccount(credentials["ssn"] , inputs["account_no"]).then(() => {
-        return res.json({
-            error   : 0 ,
-            message : "Account closed successfully"
-        });
+    accountService.closeAccount(credentials["ssn"] , inputs["account_no"]).then((result) => {
+        return res.json(result);
     } , (err) => {
         next(err);
     });
@@ -39,15 +32,58 @@ router.delete("/close" , accountValidator.validateCloseAccount , (req , res , ne
 router.get("/transaction" , accountValidator.validateTransactionAccount , (req , res , next) => {
     let inputs = req.user;
     let credentials = req.credentials;
-    accountService.getAccountTransaction(credentials["ssn"] , inputs["account_no"]).then((transactions) => {
-        return res.json({
-            error        : 0 ,
-            transactions : transactions , 
-            message      : "Account transactions list"
-        });
+    accountService.getAccountTransaction(credentials["ssn"] , inputs["account_no"]).then((result) => {
+        return res.json(result);
     } , (err) => {
         next(err);
     });
+})
+
+//-----------------------------------------------------------------------------
+
+router.post("/withdraw" , accountValidator.validateBankingAccount , (req , res , next) => {
+    let inputs      = req.user;
+    let credentials = req.credentials;
+    accountService.withdraw(credentials["ssn"] , inputs["account_no"] , inputs["amount"]).then((result) => {
+        return res.json(result); 
+    } , (err) => {
+        next(err);
+    })
+
+})
+
+//-----------------------------------------------------------------------------
+
+router.post("/deposite" , accountValidator.validateBankingAccount , (req , res , next) => {
+    let inputs      = req.user;
+    let credentials = req.credentials;
+    accountService.deposite(credentials["ssn"] , inputs["account_no"] , inputs["amount"]).then((result) => {
+        return res.json(result); 
+    } , (err) => {
+        next(err);
+    })
+})
+
+//-----------------------------------------------------------------------------
+
+router.post("/deposite/card" , accountValidator.validateBankingCard , (req , res , next) => {
+    let inputs      = req.user;
+    accountService.depositeByCard(inputs["number"] , inputs["cvv"] , inputs["pin"] , inputs["amount"]).then((result) => {
+        return res.json(result); 
+    } , (err) => {
+        next(err);
+    })
+})
+
+//-----------------------------------------------------------------------------
+
+router.post("/withdraw/card" , accountValidator.validateBankingCard , (req , res , next) => {
+    let inputs      = req.user;
+    accountService.withdrawByCard(inputs["number"] , inputs["cvv"] , inputs["pin"] , inputs["amount"]).then((result) => {
+        return res.json(result); 
+    } , (err) => {
+        next(err);
+    })
 })
 
 //-----------------------------------------------------------------------------

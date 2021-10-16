@@ -15,8 +15,14 @@ validator["isPIN"] = function(PIN) {
 
 //-----------------------------------------------------------------------------
 
+validator["isCVV"] = function(PIN) {
+	return (validator.isLength(PIN , {min: 4 , max: 4})) && (validator.isInt(PIN));
+}
+
+//-----------------------------------------------------------------------------
+
 validator["isAccountNumber"] = function(account_no) {
-	return (validator.isLength(account_no , {min: 10 , max: 10})) && (validator.isInt(account_no));
+	return (validator.isLength(account_no , {min: 9 , max: 9})) && (validator.isInt(account_no));
 }
 
 //-----------------------------------------------------------------------------
@@ -54,7 +60,8 @@ let mapper = {
 	"address"    : "isAddress" ,
 	"currency"   : "isCurrency",
 	"pin"        : "isPIN" ,
-	"account"    : "isAccountType" ,
+	"cvv"        : "isCVV" ,
+	"account_type" : "isAccountType" ,
 	"account_no" : "isAccountNumber"
 };
 

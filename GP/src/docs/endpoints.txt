@@ -1,6 +1,6 @@
 /user/auth      ==> create session
 /user/register  ==> create new account on the system
-/user/delete     ==> delete user account
+/user/delete    ==> delete user account
 /user/update    ==> update user account
 
 --------------------------------------------------------------------------------
@@ -8,6 +8,8 @@
 /account/open           ==> open new account
 /account/close          ==> close an account
 /account/transactions   ==> list all account transactions
-/account/deposite       ==> deposite from account using card info or user token and account_no
-/account/withdraw       ==> deposite from account using card info or user token and account_no
+/account/deposite       ==> deposite from account using user token and account_no
+/account/withdraw       ==> withdraw from account using user token and account_no
+/account/deposite/card  ==> deposite from account using card info
+/account/withdraw/card  ==> withdraw from account using card info
 /account/transfer       ==> transfer money from account to another using card info

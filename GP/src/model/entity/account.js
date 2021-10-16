@@ -1,14 +1,12 @@
 let Card  = require("./card.js");
+let account_types = require("../../../config.js")["account_types"];
 
 //-----------------------------------------------------------------------------
 
 function Account(balance , type , PIN) {
     this.card    = (new Card(PIN)).generate(); 
     this.balance = balance;
-    switch (type) {
-        case "saving"  : this.type = 0;break;
-        case "current" : this.type = 1;break;
-    }
+    this.type    = account_types[type]; 
 }
 
 //-----------------------------------------------------------------------------

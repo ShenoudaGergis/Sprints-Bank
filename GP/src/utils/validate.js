@@ -3,8 +3,8 @@ let account_types = require("../../config.js")["account_types"];
 
 //-----------------------------------------------------------------------------
 
-validator["isSSN"] = function(ssn , option) {
-	return (validator.isLength(ssn , {min: option.min , max: option.max})) && (validator.isInt(ssn));
+validator["isSSN"] = function(ssn) {
+	return (validator.isLength(ssn , {min: 16 , max: 16})) && (validator.isInt(ssn));
 }
 
 //-----------------------------------------------------------------------------
@@ -28,17 +28,30 @@ validator["isAccountType"] = function(type) {
 
 //-----------------------------------------------------------------------------
 
+validator["isName"] = function(name) {
+	return (validator.isLength(name , {min: 5 , max: 15})) && (validator.isAlpha(name));
+}
+
+//-----------------------------------------------------------------------------
+
+validator["isAddress"] = function(name) {
+	return validator.isLength(name , {min: 5 , max: 25});
+}
+
+//-----------------------------------------------------------------------------
+
+
 let mapper = {
 	"integer"    : "isInt" ,
 	"length"     : "isLength" ,
 	"ssn"        : "isSSN" ,
 	"float" 	 : "isFloat" , 
 	"email" 	 : "isEmail" , 
-	"name"       : "isAlpha" ,
+	"name"       : "isName" ,
 	"phone"      : "isMobilePhone" ,
 	"password"   : "isStrongPassword" , 
 	"creditCard" : "isCreditCard" ,
-	"address"    : "isAlphanumeric" ,
+	"address"    : "isAddress" ,
 	"currency"   : "isCurrency",
 	"pin"        : "isPIN" ,
 	"account"    : "isAccountType" ,
@@ -55,11 +68,10 @@ function validate(params) {
 	*/
 	let errors = [];
 	for(let p in params) {
-		// let value = (params[p]["value"] !== undefined) ? (params[p]["value"]).toString() : "";
 		let value = params[p]["value"];
-		if(value === null || value === undefined) value = "";
-		else value += "";
-		
+		if(!((typeof value === "string") || (typeof value === "number"))) {errors.push(p);continue;}
+		value += "";
+				
 		let check = params[p]["check"];
 		let args  = params[p]["args"];
 		if(!(validator[mapper[check]](value , ...args))) errors.push(p);

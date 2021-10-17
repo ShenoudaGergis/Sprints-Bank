@@ -52,9 +52,9 @@ function validateCloseAccount(req , res , next) {
 
 //-----------------------------------------------------------------------------
 
-function validateTransactionAccount(req , res , next) {
-    let inputs      = req.user;
-    let credentials = req.credentials;
+function validateInquiry(req , res , next) {
+    let inputs           = req.user;
+    let credentials      = req.credentials;
     if(credentials["ssn"] === null) {
         return res.json({
             error   : 1 ,
@@ -119,4 +119,4 @@ function validateBankingCard(req , res , next) {
 
 //-----------------------------------------------------------------------------
 
-module.exports = { validateOpenAccount , validateCloseAccount , validateTransactionAccount , validateBankingAccount , validateBankingCard };
+module.exports = { validateOpenAccount , validateCloseAccount , validateInquiry , validateBankingAccount , validateBankingCard };

@@ -139,4 +139,25 @@ function getAccountTransaction(SSN , account_no) {
 
 //-----------------------------------------------------------------------------
 
-module.exports = { withdraw , deposite , withdrawByCard , depositeByCard , openAccount , closeAccount , transfer , getAccountTransaction };
+function getAccountBalance(SSN , account_no) {
+	return accountModel.accountBelongsToUser(SSN , account_no).then((belongs) => {
+		if(!belongs) {
+			return {
+				error   : 1 ,
+				message : "User does not have account"
+			}			
+		} else {
+			return accountModel.getAccountBalance(SSN , account_no).then((balance) => {
+				return {
+					error        : 0 ,
+					transactions : balance ,
+					message      : "Account balance"
+				}
+			});
+		}
+	});
+}
+
+//-----------------------------------------------------------------------------
+
+module.exports = { withdraw , deposite , withdrawByCard , depositeByCard , openAccount , closeAccount , transfer , getAccountTransaction , getAccountBalance };

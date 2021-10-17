@@ -1,7 +1,8 @@
 let accountService   = require("../service/account.service.js");
 let accountValidator = require("../middleware/validateaccount.middleware.js");
+let fetchParams      = require("../middleware/pfetch.middleware.js");
 let express          = require("express");
-let router           = express.Router();
+let router           = express.Router({ mergeParams : true });
 
 //-----------------------------------------------------------------------------
 
@@ -29,10 +30,22 @@ router.delete("/close" , accountValidator.validateCloseAccount , (req , res , ne
 
 //-----------------------------------------------------------------------------
 
-router.get("/transaction" , accountValidator.validateTransactionAccount , (req , res , next) => {
+router.get("/transaction/:account_no" , fetchParams  , accountValidator.validateInquiry , (req , res , next) => {
     let inputs = req.user;
     let credentials = req.credentials;
     accountService.getAccountTransaction(credentials["ssn"] , inputs["account_no"]).then((result) => {
+        return res.json(result);
+    } , (err) => {
+        next(err);
+    });
+})
+
+//-----------------------------------------------------------------------------
+
+router.get("/balance/:account_no" , fetchParams  , accountValidator.validateInquiry , (req , res , next) => {
+    let inputs = req.user;
+    let credentials = req.credentials;
+    accountService.getAccountBalance(credentials["ssn"] , inputs["account_no"]).then((result) => {
         return res.json(result);
     } , (err) => {
         next(err);

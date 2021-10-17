@@ -98,13 +98,20 @@ An online banking system built with node.js & express.js
 </tr>
   
   <tr>
-    <td><code>/account/transaction</code></td>
+    <td><code>/account/transaction/:account_no</code></td>
     <td><code>GET</code></td>
     <td>
 <pre>
- {
-    "account_no"    : [number]
- }
+
+</pre>
+</tr>
+
+  <tr>
+    <td><code>/account/balance/:account_no</code></td>
+    <td><code>GET</code></td>
+    <td>
+<pre>
+
 </pre>
 </tr>
   

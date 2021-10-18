@@ -1,5 +1,5 @@
-const fetchToken = (req , res , next) => {
-    if(!req.user) req.credentials = {};
+function fetchToken(req , res , next) {
+    if(!req.credentials) req.credentials = {};
     let token = req.get("Authorization");
     if(!token) {
         req.credentials["token"] = null;
@@ -15,5 +15,6 @@ const fetchToken = (req , res , next) => {
         }
     }
 }
+
 
 module.exports = fetchToken;

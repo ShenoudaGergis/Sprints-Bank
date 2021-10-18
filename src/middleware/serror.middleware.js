@@ -1,4 +1,4 @@
-const serverError = (err , req , res , next) => {
+function serverError(err , req , res , next) {
     console.error(err);
     res.status(500).json({
         error   : 1 ,

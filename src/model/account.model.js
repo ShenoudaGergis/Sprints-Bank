@@ -1,12 +1,16 @@
-const db = require("../database/db.js");
-const accountEntity = require("./entity/account.js");
-const CardModel = require("./card.model.js");
-const {getAccountTypeByNumber} = require("../utils/misc.js");
+let db            = require("../database/db.js");
+let accountEntity = require("./entity/account.js");
+let CardModel     = require("./card.model.js");
+let {getAccountTypeByNumber} = require("../utils/misc.js");
+
+//-----------------------------------------------------------------------------
 
 function Account() {
     this.db   = db;
     this.card = new CardModel();
 }
+
+//-----------------------------------------------------------------------------
 
 Account.prototype.openAccount = function(SSN , balance , type , PIN) {
 	type = type.toLocaleLowerCase();
@@ -20,17 +24,23 @@ Account.prototype.openAccount = function(SSN , balance , type , PIN) {
 	})	
 }
 
+//-----------------------------------------------------------------------------
+
 Account.prototype.closeAccount = function(SSN , account_no) {
 	return this.db.exec("DELETE FROM accounts WHERE account_no=? AND user_id=?" , [account_no , SSN]).then(() => {
 		return this.db.affectedRows();
 	});
 }
 
+//-----------------------------------------------------------------------------
+
 Account.prototype.accountExists = function(account_no) {
 	return this.db.fetchOne("SELECT count(1) AS c FROM accounts WHERE account_no=?" , [account_no]).then((res) => {
 		return res["c"] == 1;
 	})
 }
+
+//-----------------------------------------------------------------------------
 
 Account.prototype.accountBelongsToUser = function(SSN , account_no) {
 	return this.db.fetchOne("SELECT count(1) AS c FROM accounts WHERE user_id=? AND account_no=?" , 
@@ -40,11 +50,15 @@ Account.prototype.accountBelongsToUser = function(SSN , account_no) {
 
 }
 
+//-----------------------------------------------------------------------------
+
 Account.prototype.getAccountBalance = function(SSN , account_no) {
 	return this.db.fetchOne("SELECT balance FROM accounts WHERE account_no=? AND user_id=?" , [account_no , SSN]).then((res) => {
 		return (res) ? res["balance"] : null;
 	});
 }
+
+//-----------------------------------------------------------------------------
 
 Account.prototype.updateAccountBalance = function(SSN , account_no , balance) {
 	return this.db.exec(`UPDATE accounts SET balance=? WHERE account_no=? AND user_id=?` ,
@@ -52,6 +66,8 @@ Account.prototype.updateAccountBalance = function(SSN , account_no , balance) {
             this.db.affectedRows();
         });
 }
+
+//-----------------------------------------------------------------------------
 
 Account.prototype.getAccountNoFromCard = function(number , CVV , PIN) {
 	let sql = 
@@ -64,5 +80,7 @@ Account.prototype.getAccountNoFromCard = function(number , CVV , PIN) {
 		return (res) ? res : null;
 	})
 }
+
+//-----------------------------------------------------------------------------
 
 module.exports = Account;

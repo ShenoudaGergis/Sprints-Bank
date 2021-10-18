@@ -1,7 +1,9 @@
-const userModel = new (require("../model/user.model.js"))();
-const tokenService = require("./token.service.js");
+let userModel    = new (require("../model/user.model.js"))();
+let tokenService = require("./token.service.js");
 
-const createUser = (SSN , first_name , last_name , email , phone , address , password) => {
+//-----------------------------------------------------------------------------
+
+function createUser(SSN , first_name , last_name , email , phone , address , password) {
     return userModel.createUser(SSN , first_name , last_name , email , phone , address , password).then((rows) => {
         if(rows == 0) {
             return {
@@ -17,7 +19,9 @@ const createUser = (SSN , first_name , last_name , email , phone , address , pas
     });
 }
 
-const updateUser = (SSN , first_name , last_name , email , phone , address , password) => {
+//-----------------------------------------------------------------------------
+
+function updateUser(SSN , first_name , last_name , email , phone , address , password) {
     return userModel.updateUser(SSN , first_name , last_name , email , phone , address , password).then((rows) => {
         if(rows == 0) {
             return {
@@ -34,7 +38,9 @@ const updateUser = (SSN , first_name , last_name , email , phone , address , pas
     })
 }
 
-const deleteUser = (SSN) => {
+//-----------------------------------------------------------------------------
+
+function deleteUser(SSN) {
     return userModel.deleteUser(SSN).then((rows) => {
         if(rows == 0) {
             return {
@@ -51,7 +57,9 @@ const deleteUser = (SSN) => {
     })
 }
 
-const createSession = (email , password) => {
+//-----------------------------------------------------------------------------
+
+function createSession(email , password) {
     return userModel.getUserSSN(email , password).then((SSN) => {
         if(SSN === null) {
             return {
@@ -66,5 +74,7 @@ const createSession = (email , password) => {
         }
     });
 }
+
+//-----------------------------------------------------------------------------
 
 module.exports = { createUser , updateUser , deleteUser , createSession };

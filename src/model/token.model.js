@@ -1,10 +1,14 @@
-const db = require("../database/db.js");
-const { getToken , getTimestamp } = require("../utils/misc.js");
-const session_timeout = require("../../config.js")["session_timeout"];
+let db                          = require("../database/db.js");
+let { getToken , getTimestamp } = require("../utils/misc.js");
+let session_timeout             = require("../../config.js")["session_timeout"];
+
+//-----------------------------------------------------------------------------
 
 function Token() {
     this.db = db;
 }
+
+//-----------------------------------------------------------------------------
 
 Token.prototype.createEntry = function(SSN) {
     return this.getTokenfromSSN(SSN).then((token) => {
@@ -19,9 +23,13 @@ Token.prototype.createEntry = function(SSN) {
     })
 }
 
+//-----------------------------------------------------------------------------
+
 Token.prototype.removeEntry = function(token) {
     return this.db.exec("DELETE FROM tokens WHERE token=?" , [uuid]).then(() => this.db.affectedRows())
 }
+
+//-----------------------------------------------------------------------------
 
 Token.prototype.getSSNfromToken = function(token) {
     return this.db.fetchOne("SELECT user_id from tokens WHERE token=? AND expiry_date > ?" , [token , getTimestamp()]).then((res) => {
@@ -29,10 +37,19 @@ Token.prototype.getSSNfromToken = function(token) {
     })
 }
 
+//-----------------------------------------------------------------------------
+
 Token.prototype.getTokenfromSSN = function(SSN) {
     return this.db.fetchOne("SELECT token from tokens WHERE user_id=? AND expiry_date > ?" , [SSN , getTimestamp()]).then((res) => {
         return (res) ? res["token"] : null; 
     })
 }
 
+//-----------------------------------------------------------------------------
+
 module.exports = Token;
+
+let token = new Token();
+// token.createEntry(324123123123);
+// token.getSSNfromToken("7byCKyLm2xDr74XO8nrGh").then(console.log);
+// token.getSSNfromToken("7byCKyLm2xDr74XO8nrGh").then(console.log);

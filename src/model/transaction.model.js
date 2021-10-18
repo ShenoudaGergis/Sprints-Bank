@@ -1,8 +1,12 @@
-const db = require("../database/db.js");
+let db = require("../database/db.js");
+
+//-----------------------------------------------------------------------------
 
 function Transaction() {
     this.db = db;
 }
+
+//-----------------------------------------------------------------------------
 
 Transaction.prototype.getAccountTransactions = function(SSN , account_no) {
 	let sql = 
@@ -16,6 +20,8 @@ Transaction.prototype.getAccountTransactions = function(SSN , account_no) {
 	});
 }
 
+//-----------------------------------------------------------------------------
+
 Transaction.prototype.createAccountTransaction = function(type , amount , account_no) {
 	return this.db.exec("INSERT INTO transactions VALUES (NULL , ? , CURRENT_TIMESTAMP , ? , ?)" , 
 				[type , amount , account_no]
@@ -23,5 +29,7 @@ Transaction.prototype.createAccountTransaction = function(type , amount , accoun
         return this.db.affectedRows();
     });
 }
+
+//-----------------------------------------------------------------------------
 
 module.exports = Transaction;

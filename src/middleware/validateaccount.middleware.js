@@ -1,6 +1,8 @@
-const validate = require("../utils/validate.js");
+let validate = require("../utils/validate.js");
 
-const validateOpenAccount = (req , res , next) => {
+//-----------------------------------------------------------------------------
+
+function validateOpenAccount(req , res , next) {
     let inputs      = req.user;
     let credentials = req.credentials;
     if(credentials["ssn"] === null) {
@@ -24,7 +26,9 @@ const validateOpenAccount = (req , res , next) => {
 
 }
 
-const validateCloseAccount = (req , res , next) => {
+//-----------------------------------------------------------------------------
+
+function validateCloseAccount(req , res , next) {
     let inputs      = req.user;
     let credentials = req.credentials;
     if(credentials["ssn"] === null) {
@@ -46,9 +50,11 @@ const validateCloseAccount = (req , res , next) => {
 
 }
 
-const validateInquiry = (req , res , next) => {
-    let inputs = req.user;
-    let credentials = req.credentials;
+//-----------------------------------------------------------------------------
+
+function validateInquiry(req , res , next) {
+    let inputs           = req.user;
+    let credentials      = req.credentials;
     if(credentials["ssn"] === null) {
         return res.json({
             error   : 1 ,
@@ -68,8 +74,10 @@ const validateInquiry = (req , res , next) => {
 
 }
 
-const validateBankingAccount = (req ,res , next) => {
-    let inputs = req.user;
+//-----------------------------------------------------------------------------
+
+function validateBankingAccount(req ,res , next) {
+    let inputs      = req.user;
     let credentials = req.credentials;
     if(credentials["ssn"] === null) {
         return res.json({
@@ -90,8 +98,10 @@ const validateBankingAccount = (req ,res , next) => {
     } else return next();
 }
 
-const validateBankingCard = (req , res , next) => {
-    let inputs = req.user;
+//-----------------------------------------------------------------------------
+
+function validateBankingCard(req , res , next) {
+    let inputs      = req.user;
     let result = validate({
         "number" : {value : inputs["number"]  , check : "creditCard"} ,
         "cvv"    : {value : inputs["cvv"]     , check : "cvv"} ,
@@ -106,5 +116,7 @@ const validateBankingCard = (req , res , next) => {
         });
     } else return next();   
 }
+
+//-----------------------------------------------------------------------------
 
 module.exports = { validateOpenAccount , validateCloseAccount , validateInquiry , validateBankingAccount , validateBankingCard };

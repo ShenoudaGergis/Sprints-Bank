@@ -1,6 +1,8 @@
-const db = require("./db.js");
+let db = require("./db.js");
 
-const initTables = () => {
+//-----------------------------------------------------------------------------
+
+function initTables() {
 	let tables = [
 		{
 			sql: `CREATE TABLE IF NOT EXISTS users (

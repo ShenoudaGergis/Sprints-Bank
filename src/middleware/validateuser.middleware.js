@@ -1,6 +1,8 @@
-const validate = require("../utils/validate.js");
+let validate = require("../utils/validate.js");
 
-const validateRegisterUser = (req , res , next) => {
+//-----------------------------------------------------------------------------
+
+function validateRegisterUser(req , res , next) {
     let inputs = req.user;
     let result = validate({
         "SSN"        : {value : inputs["ssn"]        , check : "ssn"} ,
@@ -20,8 +22,10 @@ const validateRegisterUser = (req , res , next) => {
     } else return next();
 }
 
-const validateUpdateUser = (req , res , next) => {
-    let inputs = req.user;
+//-----------------------------------------------------------------------------
+
+function validateUpdateUser(req , res , next) {
+    let inputs      = req.user;
     let credentials = req.credentials;
 
     if(credentials["ssn"] === null) {
@@ -47,7 +51,9 @@ const validateUpdateUser = (req , res , next) => {
     } else return next();
 }
 
-const validateDeleteUser = (req , res , next) => {
+//-----------------------------------------------------------------------------
+
+function validateDeleteUser(req , res , next) {
     let credentials = req.credentials;
     if(credentials["ssn"] === null) {
         return res.json({
@@ -58,7 +64,9 @@ const validateDeleteUser = (req , res , next) => {
     return next();
 }
 
-const validateAuthUser = (req , res , next) => {
+//-----------------------------------------------------------------------------
+
+function validateAuthUser(req , res , next) {
     let inputs = req.user;
     let result = validate({
         "email"    : {value : inputs["email"]    , check : "email"} ,
@@ -72,5 +80,7 @@ const validateAuthUser = (req , res , next) => {
         });
     } else return next();
 }
+
+//-----------------------------------------------------------------------------
 
 module.exports = { validateRegisterUser , validateUpdateUser , validateDeleteUser , validateAuthUser };

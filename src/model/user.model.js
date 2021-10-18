@@ -1,8 +1,12 @@
-const db = require("../database/db.js");
+let db = require("../database/db.js");
+
+//-----------------------------------------------------------------------------
 
 function User() {
     this.db = db;
 }
+
+//-----------------------------------------------------------------------------
 
 User.prototype.createUser = function(SSN , first_name , last_name , email , phone , address , password) {
 	return this.userExists(SSN , email).then((found) => {
@@ -18,6 +22,8 @@ User.prototype.createUser = function(SSN , first_name , last_name , email , phon
 	});
 }
 
+//-----------------------------------------------------------------------------
+
 User.prototype.updateUser = function(SSN , first_name , last_name , email , phone , address , password) {
 	return this.db.exec(
 		`UPDATE users SET first_name=? , last_name=? , email=? , phone=? , address=? , password=?
@@ -28,17 +34,23 @@ User.prototype.updateUser = function(SSN , first_name , last_name , email , phon
         })
 }
 
+//-----------------------------------------------------------------------------
+
 User.prototype.deleteUser = function(SSN) {
 	return this.db.exec("DELETE FROM users WHERE SSN=?" , [SSN]).then(() => {
         return this.db.affectedRows();
     })
 }
 
+//-----------------------------------------------------------------------------
+
 User.prototype.userExists = function(SSN , email) {
 	return this.db.fetchOne("SELECT count(1) AS c FROM users WHERE SSN=? OR email=?" , [SSN , email]).then((res) => {
 		return res["c"] == 1;
 	})
 }
+
+//-----------------------------------------------------------------------------
 
 User.prototype.getUserSSN = function(email , password) {
 	return this.db.fetchOne("SELECT SSN FROM users WHERE email=? AND password=?" , [email , password]).then((res) => {
@@ -47,4 +59,9 @@ User.prototype.getUserSSN = function(email , password) {
 	})
 }
 
+//-----------------------------------------------------------------------------
+
 module.exports = User;
+
+// let user = new User();
+// user.userExists(324123123123).then(console.log);

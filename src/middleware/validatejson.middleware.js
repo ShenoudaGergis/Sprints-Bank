@@ -1,6 +1,8 @@
-const validate = require("../utils/validate.js");
+let validate = require("../utils/validate.js");
 
-const checkJSON = (err , req , res , next) => {
+//-----------------------------------------------------------------------------
+
+function checkJSON(err , req , res , next) {
     return res.json({
         error   : 1 ,
         message : "Invalid JSON form"

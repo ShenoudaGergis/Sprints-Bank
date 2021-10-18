@@ -1,11 +1,12 @@
-const accountModel = new (require("../model/account.model.js"))();
-const transactionModel = new (require("../model/transaction.model.js"))();
-const {sumOperands} = require("../utils/misc.js");
+let accountModel     = new (require("../model/account.model.js"))();
+let transactionModel = new (require("../model/transaction.model.js"))();
+let {sumOperands}    = require("../utils/misc.js");
 
-const withdraw = (SSN , account_no , amount) => {
+//-----------------------------------------------------------------------------
+
+function withdraw(SSN , account_no , amount) {
 	return accountModel.getAccountBalance(SSN , account_no).then((balance) => {
 		if(balance === null) return {error: 1 , message: "No account found"};
-		if(amount <= 0) return {error: 1 , message: "Not valid amount"};
 		if(balance < amount) return {error: 1 , message: "Not enough balance"};
 		return accountModel.updateAccountBalance(SSN , account_no , sumOperands(balance , -amount)).then(() => {
 			return transactionModel.createAccountTransaction(-1 , amount , account_no).then(() => 
@@ -18,10 +19,11 @@ const withdraw = (SSN , account_no , amount) => {
 	});
 }
 
-const deposite = (SSN , account_no , amount) => {
+//-----------------------------------------------------------------------------
+
+function deposite(SSN , account_no , amount) {
 	return accountModel.getAccountBalance(SSN , account_no).then((balance) => {
 		if(balance === null) return {error: 1 , message: "No account found"};
-		if(amount <= 0) return {error: 1 , message: "Not valid amount"};
 		return accountModel.updateAccountBalance(SSN , account_no , sumOperands(balance , amount)).then(() => {
 			return transactionModel.createAccountTransaction(1 , amount , account_no).then(() => 
 				({
@@ -33,7 +35,9 @@ const deposite = (SSN , account_no , amount) => {
 	});
 }
 
-const withdrawByCard = (number , CVV , PIN , amount) => {
+//-----------------------------------------------------------------------------
+
+function withdrawByCard(number , CVV , PIN , amount) {
 	return accountModel.getAccountNoFromCard(number , CVV , PIN).then((res) => {
 		if(res === null) {
 			return {
@@ -45,7 +49,9 @@ const withdrawByCard = (number , CVV , PIN , amount) => {
 	});
 }
 
-const depositeByCard = (number , CVV , PIN , amount) => {
+//-----------------------------------------------------------------------------
+
+function depositeByCard(number , CVV , PIN , amount) {
 	return accountModel.getAccountNoFromCard(number , CVV , PIN).then((res) => {
 		if(res === null) {
 			return {
@@ -57,7 +63,9 @@ const depositeByCard = (number , CVV , PIN , amount) => {
 	});
 }
 
-const transfer = (source , destination , amount) => {
+//-----------------------------------------------------------------------------
+
+function transfer(source , destination , amount) {
     return withdrawByCard(source.number , source.CVV , source.PIN , amount).then((result) => {
         if(result["error"] === 0) {
             return depositeByCard(destination.number , destination.CVV , destination.PIN , amount).then(() => {
@@ -70,7 +78,9 @@ const transfer = (source , destination , amount) => {
     })
 }
 
-const openAccount = (SSN , balance , type , PIN) => {
+//-----------------------------------------------------------------------------
+
+function openAccount(SSN , balance , type , PIN) {
     return accountModel.openAccount(SSN , balance , type , PIN).then((account) => ({
         error   : 0 ,
         message : "Account created successfully" ,
@@ -78,7 +88,9 @@ const openAccount = (SSN , balance , type , PIN) => {
     }));
 }
 
-const closeAccount = (SSN , account_no) => {
+//-----------------------------------------------------------------------------
+
+function closeAccount(SSN , account_no) {
 	return accountModel.accountBelongsToUser(SSN , account_no).then((belongs) => {
 		if(!belongs) {
 			return {
@@ -104,7 +116,9 @@ const closeAccount = (SSN , account_no) => {
 	})
 }
 
-const getAccountTransaction = (SSN , account_no) => {
+//-----------------------------------------------------------------------------
+
+function getAccountTransaction(SSN , account_no) {
 	return accountModel.accountBelongsToUser(SSN , account_no).then((belongs) => {
 		if(!belongs) {
 			return {
@@ -123,7 +137,9 @@ const getAccountTransaction = (SSN , account_no) => {
 	});
 }
 
-const getAccountBalance = (SSN , account_no) => {
+//-----------------------------------------------------------------------------
+
+function getAccountBalance(SSN , account_no) {
 	return accountModel.accountBelongsToUser(SSN , account_no).then((belongs) => {
 		if(!belongs) {
 			return {
@@ -141,5 +157,7 @@ const getAccountBalance = (SSN , account_no) => {
 		}
 	});
 }
+
+//-----------------------------------------------------------------------------
 
 module.exports = { withdraw , deposite , withdrawByCard , depositeByCard , openAccount , closeAccount , transfer , getAccountTransaction , getAccountBalance };

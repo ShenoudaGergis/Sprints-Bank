@@ -1,29 +1,19 @@
-let tokenModel = new (require("../model/token.model.js"))();
+const tokenModel = new (require("../model/token.model.js"))();
 
-//-----------------------------------------------------------------------------
-
-function createEntry(SSN) {
+const createEntry = (SSN) => {
     return tokenModel.createEntry(SSN);
 }
 
-//-----------------------------------------------------------------------------
-
-function removeEntry(token) {
+const removeEntry = (token) => {
     return tokenModel.removeEntry(token);
 }
 
-//-----------------------------------------------------------------------------
-
-function getSSNfromToken(token) {
+const getSSNfromToken = (token) => {
     return tokenModel.getSSNfromToken(token);
 }
 
-//-----------------------------------------------------------------------------
-
-function getTokenfromSSN(SSN) {
+const getTokenfromSSN = (SSN) => {
     return tokenModel.getTokenfromSSN(SSN);
 }
-
-//-----------------------------------------------------------------------------
 
 module.exports = { createEntry , removeEntry , getTokenfromSSN , getSSNfromToken };

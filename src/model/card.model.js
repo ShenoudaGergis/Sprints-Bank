@@ -1,12 +1,8 @@
-let db = require("../database/db.js");
-
-//-----------------------------------------------------------------------------
+const db = require("../database/db.js");
 
 function Card() {
     this.db = db;
 }
-
-//-----------------------------------------------------------------------------
 
 Card.prototype.registerCard = function(card) {
 	return this.db.exec("INSERT INTO cards (network_type , number , expiry_date , CVV , PIN) VALUES (?,?,?,?,?)" ,

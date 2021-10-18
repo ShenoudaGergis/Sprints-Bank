@@ -1,5 +1,5 @@
-let path    = require("path");
-let sqlite3 = require("sqlite3").verbose();
+const path    = require("path");
+const sqlite3 = require("sqlite3").verbose();
 const PATH  = require("../../config.js")["db_store"];
 
 function DB() {
@@ -18,8 +18,6 @@ function DB() {
 	});
 }
 
-//------------------------------------------------------------------------
-
 DB.prototype.exec = function(sql , params=[]) {
 	return this.db.then((db) => {
 		return new Promise((resolve , reject) => {
@@ -30,8 +28,6 @@ DB.prototype.exec = function(sql , params=[]) {
 		})
 	});
 }
-
-//------------------------------------------------------------------------
 
 DB.prototype.fetchOne = function(sql , params=[]) {
 	return this.db.then((db) => {
@@ -44,8 +40,6 @@ DB.prototype.fetchOne = function(sql , params=[]) {
 	});
 }
 
-//------------------------------------------------------------------------
-
 DB.prototype.fetchMany = function(sql , params=[]) {
 	return this.db.then((db) => {
 		return new Promise((resolve , reject) => {
@@ -57,8 +51,6 @@ DB.prototype.fetchMany = function(sql , params=[]) {
 	});
 }
 
-//------------------------------------------------------------------------
-
 DB.prototype.lastInsertedID = function() {
 	return this.db.then((db) => {
 		return this.fetchOne("SELECT last_insert_rowid() as id" , []).then(res => {
@@ -66,8 +58,6 @@ DB.prototype.lastInsertedID = function() {
 		});
 	});
 }
-
-//------------------------------------------------------------------------
 
 DB.prototype.affectedRows = function() {
 	return this.db.then((db) => {
@@ -77,8 +67,4 @@ DB.prototype.affectedRows = function() {
 	});
 }
 
-//------------------------------------------------------------------------
-
 module.exports = (new DB());
-
-// let d = new DB();

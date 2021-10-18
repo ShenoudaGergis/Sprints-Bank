@@ -1,9 +1,6 @@
-let tokenModel = new (require("../model/token.model.js"))();
+const tokenModel = new (require("../model/token.model.js"))();
 
-//-----------------------------------------------------------------------------
-
-function fetchSSN(req , res , next) {
-    if(!req.credentials) req.credentials = {};
+const fetchSSN = (req , res , next) => {
     let token = req.credentials["token"];
     if(token === null) {
         req.credentials["ssn"] = null;

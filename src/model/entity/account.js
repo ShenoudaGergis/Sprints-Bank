@@ -1,7 +1,5 @@
-let Card  = require("./card.js");
-let account_types = require("../../../config.js")["account_types"];
-
-//-----------------------------------------------------------------------------
+const Card  = require("./card.js");
+const account_types = require("../../../config.js")["account_types"];
 
 function Account(balance , type , PIN) {
     this.card    = (new Card(PIN)).generate(); 
@@ -9,13 +7,9 @@ function Account(balance , type , PIN) {
     this.type    = account_types[type]; 
 }
 
-//-----------------------------------------------------------------------------
-
 Account.prototype.getAccountNo = function() {
     return this.card["number"].toString().substr(7)
 }
-
-//-----------------------------------------------------------------------------
 
 Account.prototype.generate = function() {
     return {
@@ -25,7 +19,5 @@ Account.prototype.generate = function() {
         "type"       : this.type ,
     };
 }
-
-//-----------------------------------------------------------------------------
 
 module.exports = Account;

@@ -1,5 +1,5 @@
 function fetchToken(req , res , next) {
-    if(!req.user) req.credentials = {};
+    if(!req.credentials) req.credentials = {};
     let token = req.get("Authorization");
     if(!token) {
         req.credentials["token"] = null;

@@ -1,84 +1,114 @@
-let path    = require("path");
-let sqlite3 = require("sqlite3").verbose();
-const PATH  = require("../../config.js")["db_store"];
+var mysql    = require("mysql");
+let hostname = require("../../config.js")["mysql_hostname"];
+let username = require("../../config.js")["mysql_username"];
+let password = require("../../config.js")["mysql_password"];
+let port     = require("../../config.js")["mysql_port"];
+let dbname   = require("../../config.js")["mysql_dbname"];
+
+
+//-----------------------------------------------------------------------------
 
 function DB() {
-	this.db = new Promise((resolve , reject) => {
-		let db = new sqlite3.Database(PATH , (error) => {
-			if(error) return reject(error);
-			resolve(db);
-		});
-	}).then((db) => {
-		return new Promise((resolve , reject) => {
-			db.get("PRAGMA foreign_keys = ON;" , [] , (error) => {
-				if(error) return reject(error);
-				return resolve(db); 
-			});
-		});
-	});
+    this.db = new Promise((resolve , reject) => {
+        let con = mysql.createConnection({
+            host     : hostname , 
+            user     : username ,
+            password : password ,
+            port     : port ,
+            database : dbname
+        })
+        con.connect((err) => {
+            if(err) return reject(err);
+            else return resolve(con);
+        })
+    })
 }
 
-//------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
 
-DB.prototype.exec = function(sql , params=[]) {
-	return this.db.then((db) => {
-		return new Promise((resolve , reject) => {
-			db.run(sql , params , (error) => {
-				if(error) return reject(error);
-				resolve(db);
-			});
-		})
-	});
+DB.prototype.exec = function(sql , params = []) {
+    return this.db.then((con) => {
+        return new Promise((resolve , reject) => {
+            con.query(sql , params , (err) => {
+                if(err) return reject(err);
+                else return resolve(con);
+            });
+        });
+    })
 }
 
-//------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
 
-DB.prototype.fetchOne = function(sql , params=[]) {
-	return this.db.then((db) => {
-		return new Promise((resolve , reject) => {
-			db.get(sql , params , (error , result) => {
-				if(error) return reject(error);
-				resolve(result);
-			});
-		})
-	});
+DB.prototype.fetchOne = function(sql , params = []) {
+    return this.db.then((con) => {
+        return new Promise((resolve , reject) => {
+            con.query(sql , params , (err , results) => {
+                if(err) return reject(err);
+                else {
+                    if(results.length == 0) results = {};
+                    else results = results[0];
+                    return resolve(results);
+                }
+            });
+        });
+    })
 }
 
-//------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
 
-DB.prototype.fetchMany = function(sql , params=[]) {
-	return this.db.then((db) => {
-		return new Promise((resolve , reject) => {
-			db.all(sql , params , (error , result) => {
-				if(error) return reject(error);
-				resolve(result);
-			});
-		})
-	});
+DB.prototype.fetchMany = function(sql , params = []) {
+    return this.db.then((con) => {
+        return new Promise((resolve , reject) => {
+            con.query(sql , params , (err , results) => {
+                if(err) return reject(err);
+                return resolve(results);
+            });
+        });
+    })
 }
 
-//------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
 
-DB.prototype.lastInsertedID = function() {
-	return this.db.then((db) => {
-		return this.fetchOne("SELECT last_insert_rowid() as id" , []).then(res => {
-			return (res && "id" in res) ? res["id"] : null; 
-		});
-	});
+DB.prototype.affectedRows = function(sql , params = []) {
+    return this.db.then((con) => {
+        return this.fetchOne("SELECT ROW_COUNT() as c" , []).then((result) => {
+            return ("c" in result) ? result["c"] : null;
+        });
+    })
 }
 
-//------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
 
-DB.prototype.affectedRows = function() {
-	return this.db.then((db) => {
-		return this.fetchOne("SELECT changes() as affected_rows" , []).then((res) => {
-			return res["affected_rows"];
-		});
-	});
+DB.prototype.startTransaction = function() {
+    return this.db.then(() => {
+        return this.exec("START TRANSACTION;" , []);
+    });
 }
 
-//------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+
+DB.prototype.commit = function() {
+    return this.db.then(() => {
+        return this.exec("COMMIT;" , []);
+    });
+}
+
+//-----------------------------------------------------------------------------
+
+DB.prototype.rollback = function() {
+    return this.db.then(() => {
+        return this.exec("ROLLBACK;" , []);
+    });
+}
+
+//-----------------------------------------------------------------------------
+
+DB.prototype.turnoffAutocommit = function() {
+    return this.db.then(() => {
+        return this.exec("SET autocommit=0;" , []);
+    });    
+}
+
+//-----------------------------------------------------------------------------
 
 module.exports = (new DB());
-
-// let d = new DB();

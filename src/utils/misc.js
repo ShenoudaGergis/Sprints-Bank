@@ -56,4 +56,24 @@ function sumOperands(...numbers) {
 
 //-----------------------------------------------------------------------------
 
-module.exports = {getRandomInt , getToken , getTimestamp , getAccountTypeByNumber , getNumOfDigits , isDigitPlace , sumOperands};
+function isObject(v) {
+    return (typeof v === "object" &&
+        !Array.isArray(v) &&
+        v !== null);
+}
+
+//-----------------------------------------------------------------------------
+
+function prepareObject(obj) {
+    let newObj = {};
+    for(let key in obj) {
+        if((typeof obj[key]) === "string") { newObj[key.toLowerCase()] = obj[key].trim(); }
+        else if(isObject(obj[key])) { newObj[key.toLowerCase()] = prepareObject(obj[key]); }
+        else { newObj[key.toLowerCase()] = obj[key] }
+    }
+    return newObj;
+}
+
+//-----------------------------------------------------------------------------
+
+module.exports = {getRandomInt , getToken , getTimestamp , getAccountTypeByNumber , getNumOfDigits , isDigitPlace , sumOperands , isObject , prepareObject };

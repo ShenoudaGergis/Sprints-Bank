@@ -10,6 +10,7 @@ router.post("/open", accountValidator.validateOpenAccount, accountController._op
 router.delete("/close", accountValidator.validateCloseAccount, accountController._close);
 router.post("/withdraw", accountValidator.validateBankingAccount, accountController._witdraw);
 router.post("/deposite", accountValidator.validateBankingAccount, accountController._deposite);
+router.post("/transfer", accountValidator.validateTransfer, accountController._transfer);
 router.post("/withdraw/card", accountValidator.validateBankingCard, accountController._witdrawByCard);
 router.post("/deposite/card", accountValidator.validateBankingCard, accountController._depositeByCard);
 router.get("/balance/:account_no", fetchParams, accountValidator.validateInquiry, accountController._getBalance);

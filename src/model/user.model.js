@@ -54,8 +54,7 @@ User.prototype.userExists = function(SSN , email) {
 
 User.prototype.getUserSSN = function(email , password) {
 	return this.db.fetchOne("SELECT SSN FROM users WHERE email=? AND password=?" , [email , password]).then((res) => {
-		if(res) return res["SSN"];
-		return null;
+		return (res["SSN"]) ? res["SSN"] : null;
 	})
 }
 

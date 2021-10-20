@@ -33,7 +33,7 @@ Token.prototype.removeEntry = function(token) {
 
 Token.prototype.getSSNfromToken = function(token) {
     return this.db.fetchOne("SELECT user_id from tokens WHERE token=? AND expiry_date > ?" , [token , getTimestamp()]).then((res) => {
-        return (res) ? res["user_id"] : null; 
+        return (res["user_id"]) ? res["user_id"] : null; 
     })
 }
 
@@ -41,7 +41,7 @@ Token.prototype.getSSNfromToken = function(token) {
 
 Token.prototype.getTokenfromSSN = function(SSN) {
     return this.db.fetchOne("SELECT token from tokens WHERE user_id=? AND expiry_date > ?" , [SSN , getTimestamp()]).then((res) => {
-        return (res) ? res["token"] : null; 
+        return (res["token"]) ? res["token"] : null; 
     })
 }
 
@@ -49,7 +49,7 @@ Token.prototype.getTokenfromSSN = function(SSN) {
 
 module.exports = Token;
 
-let token = new Token();
-// token.createEntry(324123123123);
+// let token = new Token();
+// token.createEntry(2410973947127444).then(console.log)
 // token.getSSNfromToken("7byCKyLm2xDr74XO8nrGh").then(console.log);
 // token.getSSNfromToken("7byCKyLm2xDr74XO8nrGh").then(console.log);

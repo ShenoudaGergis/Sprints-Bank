@@ -98,9 +98,5 @@ function validate(params) {
 
 module.exports = validate;
 
-// console.log(validate({
-	// "password"      : {value : "sdaEAS23#" , check : "password"} ,
-	// "account_no"      : {value : "114615032" , check : "account_no"} ,
-	// "phone" : {value : "01025564492" , check : "phone"} ,
-// }));
+
 

@@ -1,4 +1,5 @@
-let validate = require("../utils/validate.js");
+let validate     = require("../utils/validate.js");
+let { isObject } = require("../utils/misc.js");
 
 //-----------------------------------------------------------------------------
 
@@ -76,6 +77,39 @@ function validateInquiry(req , res , next) {
 
 //-----------------------------------------------------------------------------
 
+function validateTransfer(req , res , next) {
+    let inputs      = req.user;
+    let sourceCard  = isObject(inputs["source"]) ? inputs["source"] : {};
+    let destCard    = isObject(inputs["destination"]) ? inputs["destination"] : {}; 
+    let amount      = inputs["amount"]; 
+
+    let sourceResult = validate({
+        "source number" : {value : sourceCard["number"]  , check : "creditCard"} ,
+        "source cvv"    : {value : sourceCard["cvv"]     , check : "cvv"} ,
+        "source pin"    : {value : sourceCard["pin"]     , check : "pin"} ,
+    });
+    let destResult  = validate({
+        "destination number" : {value : destCard["number"]  , check : "creditCard"} ,
+        "destination cvv"    : {value : destCard["cvv"]     , check : "cvv"} ,
+        "destination pin"    : {value : destCard["pin"]     , check : "pin"} ,
+    });
+    let amountResult = validate({
+        "amount"    : {value : amount , check : "currency"} ,
+    });
+
+    let agg = sourceResult.concat(destResult).concat(amountResult);
+    if(agg.length !== 0) {
+        return res.json({
+            error   : 1 ,
+            message : "Invalid parameters" ,
+            params  : agg
+        });
+    } 
+    return next();
+}
+
+//-----------------------------------------------------------------------------
+
 function validateBankingAccount(req ,res , next) {
     let inputs      = req.user;
     let credentials = req.credentials;
@@ -119,4 +153,4 @@ function validateBankingCard(req , res , next) {
 
 //-----------------------------------------------------------------------------
 
-module.exports = { validateOpenAccount , validateCloseAccount , validateInquiry , validateBankingAccount , validateBankingCard };
+module.exports = { validateOpenAccount , validateCloseAccount , validateInquiry , validateBankingAccount , validateBankingCard , validateTransfer };

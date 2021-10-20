@@ -66,16 +66,41 @@ function depositeByCard(number , CVV , PIN , amount) {
 //-----------------------------------------------------------------------------
 
 function transfer(source , destination , amount) {
-    return withdrawByCard(source.number , source.CVV , source.PIN , amount).then((result) => {
-        if(result["error"] === 0) {
-            return depositeByCard(destination.number , destination.CVV , destination.PIN , amount).then(() => {
-                return {
-                    error   : 0 ,
-                    message : "Transfer succeeded"
-                }
-            })
-        } else return result;
-    })
+	return accountModel.getAccountNoFromCard(source.number , source.cvv , source.pin).then((res) => {
+		if(res === null) {
+			return {
+				error: 1 ,
+				message: "No corresponding account associated for the source"
+			}
+		}
+		return accountModel.getAccountNoFromCard(destination.number , destination.cvv , destination.pin).then((res) => {
+			if(res === null) {
+				return {
+					error: 1 ,
+					message: "No corresponding account associated for the destination"
+				}
+			} else return {error : 0};
+		})
+	}).then((res) => {
+		if(res["error"] === 1) return res;
+		return withdrawByCard(source.number , source.cvv , source.pin , amount).then((result) => {
+			if(result["error"] === 0) {
+				return depositeByCard(destination.number , destination.cvv , destination.pin , amount).then((result) => {
+					if(result["error"] === 0) {
+						return {
+							error   : 0 ,
+							message : "Transfer succeeded"
+						}	
+					} else {
+						return {
+							error   : 1 ,
+							message : "Transfer failed"
+						}	
+					}
+				})
+			} else return result;
+		})	
+	})
 }
 
 //-----------------------------------------------------------------------------

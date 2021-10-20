@@ -75,6 +75,19 @@ function _deposite(req , res , next) {
 
 //-----------------------------------------------------------------------------
 
+function _transfer(req , res , next) {
+    let source = req.user["source"];
+    let dest   = req.user["destination"];
+    let amount = req.user["amount"];
+    accountService.transfer(source , dest , amount).then((result) => {
+        return res.json(result); 
+    } , (err) => {
+        next(err);
+    })
+}
+
+//-----------------------------------------------------------------------------
+
 function _depositeByCard(req , res , next) {
     let inputs      = req.user;
     accountService.depositeByCard(inputs["number"] , inputs["cvv"] , inputs["pin"] , inputs["amount"]).then((result) => {
@@ -104,6 +117,7 @@ module.exports = {
     _getBalance,
     _deposite,
     _witdraw,
+    _transfer ,
     _depositeByCard,
     _witdrawByCard
 };

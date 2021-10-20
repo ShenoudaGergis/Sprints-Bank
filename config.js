@@ -1,10 +1,14 @@
 let path = require("path");
 
 module.exports = {
-    "db_store"              : path.resolve(__dirname , "./data/data.db") ,
+    "mysql_hostname"        : "localhost" ,
+    "mysql_username"        : "root" ,
+    "mysql_password"        : "" ,
+    "mysql_port"            : 3306 ,
+    "mysql_dbname"          : "bank" ,
     "cert_path"             : path.resolve(__dirname , "./cert") ,
     "session_timeout"       : 30 ,
-    "port"                  : 3000 ,
+    "server_port"           : 3200 ,
     "account_types"         : {"saving": 1 , "current": 2} ,
     "name_length"           : {min : 4 , max : 20} , 
     "address_length"        : {min : 5 , max : 30} ,

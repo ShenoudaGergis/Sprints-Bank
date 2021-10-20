@@ -15,13 +15,35 @@ function Account() {
 Account.prototype.openAccount = function(SSN , balance , type , PIN) {
 	type = type.toLocaleLowerCase();
 	let account = (new accountEntity(balance , type , PIN)).generate();
-	return this.card.registerCard(account["card"]).then((cardID) => {
+
+
+	return this.db.startTransaction().then(() => {
+		return this.card.registerCard(account["card"]);
+	}).then((cardID) => {
 		return this.db.exec("INSERT INTO accounts (account_no , balance , account_type , card_id , user_id) VALUES (?,?,?,?,?)" , 
-					 [account["account_no"] , account["balance"] , account["type"] , cardID , SSN]).then(() => {
-						account["type"] = getAccountTypeByNumber(account["type"]);
-						return account 
-					 })
-	})	
+			[account["account_no"] , account["balance"] , account["type"] , cardID , SSN])
+	}).then(() => {
+		account["type"] = getAccountTypeByNumber(account["type"]);
+		return this.db.commit().then(() => account); 
+	 } , (err) => {
+		return this.db.rollback().then(() => { 
+			throw err;
+		 })
+	 })
+
+	// return this.db.startTransaction().then(() => {
+	// 	return this.card.registerCard(account["card"]).then((cardID) => {
+	// 		return this.db.exec("INSERT INTO accounts (account_no , balance , account_type , card_id , user_id) VALUES (?,?,?,?,?)" , 
+	// 					 [account["account_no"]+"22" , account["balance"] , account["type"] , cardID , SSN]).then(() => {
+	// 						account["type"] = getAccountTypeByNumber(account["type"]);
+	// 						return this.db.commit().then(() => account); 
+	// 					 } , (err) => {
+	// 						return this.db.rollback().then(() => { 
+	// 							throw err;
+	// 						 })
+	// 					 })
+	// 	})	
+	// });
 }
 
 //-----------------------------------------------------------------------------
@@ -54,7 +76,7 @@ Account.prototype.accountBelongsToUser = function(SSN , account_no) {
 
 Account.prototype.getAccountBalance = function(SSN , account_no) {
 	return this.db.fetchOne("SELECT balance FROM accounts WHERE account_no=? AND user_id=?" , [account_no , SSN]).then((res) => {
-		return (res) ? res["balance"] : null;
+		return (res["balance"]) ? res["balance"] : null;
 	});
 }
 
@@ -77,7 +99,7 @@ Account.prototype.getAccountNoFromCard = function(number , CVV , PIN) {
 	 WHERE cards.number=? AND cards.CVV=? AND cards.PIN=? 
 	`;
 	return this.db.fetchOne(sql , [number , CVV , PIN]).then((res) => {
-		return (res) ? res : null;
+		return (res["account_no"]) ? res : null;
 	})
 }
 

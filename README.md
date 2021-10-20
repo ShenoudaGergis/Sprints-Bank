@@ -2,7 +2,7 @@
 
 ## sprints online bank
 
-An online banking system built with node.js & express.js
+An online bank system built with node.js & express.js
 
 ## API endpoints
 1. User 
@@ -149,8 +149,8 @@ An online banking system built with node.js & express.js
     "amount"     : [number] ,
  }
 </pre>
+     
       
-
 <tr>
     <td><code>/account/withdraw/card</code></td>
     <td><code>POST</code></td>
@@ -163,6 +163,26 @@ An online banking system built with node.js & express.js
     "amount"     : [number] ,
  }
 </pre>
+      
+<tr>
+    <td><code>/account/transfer</code></td>
+    <td><code>POST</code></td>
+    <td>
+<pre>
+{
+  "source" : {
+    "number"     : [number] ,
+    "cvv"        : [number] ,
+    "pin"        : [number] ,
+  } ,
+  "destination: : {
+    "number"     : [number] ,
+    "cvv"        : [number] ,
+    "pin"        : [number] ,    
+  } 
+  "amount"     : [number] ,
+}
+</pre>      
 </table>    
  
 ## Authentication
@@ -174,9 +194,13 @@ Each response for the listed API calls above will have `error` key, if its value
 ## How to use
 For now, you can use the application locally by cloning the project in your local machine then <br />
 run : `npm install` to install the required packages <br />
-run : `npm start` to initialize database tables and run server<br /><br />
+run : `npm start` to initialize database tables and run server<br />
+
+Customer should first create a profile providing his personal info, then using a valid token he can then open an account with any amount of money. The account generated will be attached with a debit card, the card will have number , CVV and PIN. User can make any transactions using this info or with his account number and a valid authentication token  
+      
 *The application will be hosted soon*
       
 ## Configurations
-You can change the default configurations found in `config.js` file such as the session_timeout for each token generated in minutes
+You can change the default configurations found in `config.js` file such as the `session_timeout` for each token generated in minutes
       
+ 

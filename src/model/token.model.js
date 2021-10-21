@@ -48,8 +48,3 @@ Token.prototype.getTokenfromSSN = function(SSN) {
 //-----------------------------------------------------------------------------
 
 module.exports = Token;
-
-// let token = new Token();
-// token.createEntry(2410973947127444).then(console.log)
-// token.getSSNfromToken("7byCKyLm2xDr74XO8nrGh").then(console.log);
-// token.getSSNfromToken("7byCKyLm2xDr74XO8nrGh").then(console.log);

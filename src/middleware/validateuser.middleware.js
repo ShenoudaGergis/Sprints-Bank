@@ -14,7 +14,7 @@ function validateRegisterUser(req , res , next) {
         "address"    : {value : inputs["address"]    , check : "address"} 
     }); 
     if(result.length !== 0) {
-        return res.json({
+        return res.status(400).json({
             error   : 1 ,
             message : "Invalid parameters" ,
             params  : result
@@ -29,7 +29,7 @@ function validateUpdateUser(req , res , next) {
     let credentials = req.credentials;
 
     if(credentials["ssn"] === null) {
-        return res.json({
+        return res.status(401).json({
             error   : 1 ,
             message : "Authentication failed"
         });
@@ -43,7 +43,7 @@ function validateUpdateUser(req , res , next) {
         "address"    : {value : inputs["address"]    , check : "address"} 
     }); 
     if(result.length !== 0) {
-        return res.json({
+        return res.status(400).json({
             error   : 1 ,
             message : "Invalid parameters" ,
             params  : result
@@ -56,7 +56,7 @@ function validateUpdateUser(req , res , next) {
 function validateDeleteUser(req , res , next) {
     let credentials = req.credentials;
     if(credentials["ssn"] === null) {
-        return res.json({
+        return res.status(401).json({
             error   : 1 ,
             message : "Authentication failed"
         });
@@ -73,7 +73,7 @@ function validateAuthUser(req , res , next) {
         "password" : {value : inputs["password"] , check : "password"} ,
     }); 
     if(result.length !== 0) {
-        return res.json({
+        return res.status(400).json({
             error   : 1 ,
             message : "Invalid parameters" ,
             params  : result

@@ -30,20 +30,6 @@ Account.prototype.openAccount = function(SSN , balance , type , PIN) {
 			throw err;
 		 })
 	 })
-
-	// return this.db.startTransaction().then(() => {
-	// 	return this.card.registerCard(account["card"]).then((cardID) => {
-	// 		return this.db.exec("INSERT INTO accounts (account_no , balance , account_type , card_id , user_id) VALUES (?,?,?,?,?)" , 
-	// 					 [account["account_no"]+"22" , account["balance"] , account["type"] , cardID , SSN]).then(() => {
-	// 						account["type"] = getAccountTypeByNumber(account["type"]);
-	// 						return this.db.commit().then(() => account); 
-	// 					 } , (err) => {
-	// 						return this.db.rollback().then(() => { 
-	// 							throw err;
-	// 						 })
-	// 					 })
-	// 	})	
-	// });
 }
 
 //-----------------------------------------------------------------------------

@@ -7,7 +7,7 @@ function validateOpenAccount(req , res , next) {
     let inputs      = req.user;
     let credentials = req.credentials;
     if(credentials["ssn"] === null) {
-        return res.json({
+        return res.status(401).json({
             error   : 1 ,
             message : "Authentication failed"
         });
@@ -18,7 +18,7 @@ function validateOpenAccount(req , res , next) {
         "pin"     : {value : inputs["pin"]      , check : "pin"} ,
    }); 
     if(result.length !== 0) {
-        return res.json({
+        return res.status(400).json({
             error   : 1 ,
             message : "Invalid parameters" ,
             params  : result
@@ -33,7 +33,7 @@ function validateCloseAccount(req , res , next) {
     let inputs      = req.user;
     let credentials = req.credentials;
     if(credentials["ssn"] === null) {
-        return res.json({
+        return res.status(401).json({
             error   : 1 ,
             message : "Authentication failed"
         });
@@ -42,7 +42,7 @@ function validateCloseAccount(req , res , next) {
         "account_no" : {value : inputs["account_no"]  , check : "account_no"} ,
    }); 
     if(result.length !== 0) {
-        return res.json({
+        return res.status(400).json({
             error   : 1 ,
             message : "Invalid parameters" ,
             params  : result
@@ -57,7 +57,7 @@ function validateInquiry(req , res , next) {
     let inputs           = req.user;
     let credentials      = req.credentials;
     if(credentials["ssn"] === null) {
-        return res.json({
+        return res.status(401).json({
             error   : 1 ,
             message : "Authentication failed"
         });
@@ -66,7 +66,7 @@ function validateInquiry(req , res , next) {
         "account_no" : {value : inputs["account_no"]  , check : "account_no"} ,
     }); 
     if(result.length !== 0) {
-        return res.json({
+        return res.status(400).json({
             error   : 1 ,
             message : "Invalid parameters" ,
             params  : result
@@ -99,7 +99,7 @@ function validateTransfer(req , res , next) {
 
     let agg = sourceResult.concat(destResult).concat(amountResult);
     if(agg.length !== 0) {
-        return res.json({
+        return res.status(400).json({
             error   : 1 ,
             message : "Invalid parameters" ,
             params  : agg
@@ -114,7 +114,7 @@ function validateBankingAccount(req ,res , next) {
     let inputs      = req.user;
     let credentials = req.credentials;
     if(credentials["ssn"] === null) {
-        return res.json({
+        return res.status(401).json({
             error   : 1 ,
             message : "Authentication failed"
         });
@@ -124,7 +124,7 @@ function validateBankingAccount(req ,res , next) {
         "amount"     : {value : inputs["amount"]      , check : "currency"} ,
     }); 
     if(result.length !== 0) {
-        return res.json({
+        return res.status(400).json({
             error   : 1 ,
             message : "Invalid parameters" ,
             params  : result
@@ -143,7 +143,7 @@ function validateBankingCard(req , res , next) {
         "amount" : {value : inputs["amount"]  , check : "currency"} ,
     }); 
     if(result.length !== 0) {
-        return res.json({
+        return res.status(400).json({
             error   : 1 ,
             message : "Invalid parameters" ,
             params  : result

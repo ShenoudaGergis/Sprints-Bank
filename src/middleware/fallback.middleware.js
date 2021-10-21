@@ -1,5 +1,5 @@
 function fallback(req , res , next) {
-    res.json({
+    res.status(404).json({
         error   : 1 ,
         message : "Path not found"
     });

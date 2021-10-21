@@ -7,6 +7,8 @@ module.exports = {
     "mysql_port"            : 3306 ,
     "mysql_dbname"          : "bank" ,
     "cert_path"             : path.resolve(__dirname , "./cert") ,
+    "log_path"              : path.resolve(__dirname , "./logs") ,
+    "log_verbose"           : true ,
     "session_timeout"       : 30 ,
     "server_port"           : process.env.PORT || 3200 ,
     "account_types"         : {"saving": 1 , "current": 2 , "payroll" : 3} ,

@@ -61,6 +61,3 @@ User.prototype.getUserSSN = function(email , password) {
 //-----------------------------------------------------------------------------
 
 module.exports = User;
-
-// let user = new User();
-// user.userExists(324123123123).then(console.log);

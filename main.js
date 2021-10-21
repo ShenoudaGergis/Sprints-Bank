@@ -11,6 +11,7 @@ let fetchBody     = require("./src/middleware/bfetch.middleware.js");
 let fetchSSN      = require("./src/middleware/ssnfetch.middleware.js");
 let serverError   = require("./src/middleware/serror.middleware.js");
 let fallback      = require("./src/middleware/fallback.middleware.js");
+let log           = require("./src/middleware/log.middleware.js");
 let app           = express();
 let port          = require("./config.js")["server_port"];
 let cert_path     = require("./config.js")["cert_path"];
@@ -18,6 +19,7 @@ let cert_path     = require("./config.js")["cert_path"];
 
 //-----------------------------------------------------------------------------
 
+app.use(log);
 app.use(json());
 app.use(validateJSON);
 app.use(fetchToken);

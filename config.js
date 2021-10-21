@@ -8,7 +8,7 @@ module.exports = {
     "mysql_dbname"          : "bank" ,
     "cert_path"             : path.resolve(__dirname , "./cert") ,
     "session_timeout"       : 30 ,
-    "server_port"           : 3200 ,
+    "server_port"           : process.env.PORT || 3200 ,
     "account_types"         : {"saving": 1 , "current": 2 , "payroll" : 3} ,
     "name_length"           : {min : 4 , max : 20} , 
     "address_length"        : {min : 5 , max : 30} ,

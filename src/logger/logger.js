@@ -6,7 +6,7 @@ let { getLogFileName , getTimestamp }  = require("../utils/misc.js");
 //-----------------------------------------------------------------------------
 
 function formatLogContent(req , res) {
-    let out = `[ ${(res.statusCode === 500) ? "ERROR" : "INFO"} ] [ ${ getTimestamp() } ] [ ${JSON.stringify(req.body)} ] [ ${JSON.stringify(req.params)} ] [ ${res.statusCode} ]\r\n`
+    let out = `[ ${(res.statusCode === 500) ? "ERROR" : "INFO"} ] [ ${ getTimestamp() } ] [ ${req.originalUrl} ] [ ${JSON.stringify(req.body)} ] [ ${JSON.stringify(req.params)} ] [ ${res.statusCode} ]\r\n`
     if(log_verbose) process.stdout.write(out);
     return out;
 }

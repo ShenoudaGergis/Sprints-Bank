@@ -28,7 +28,7 @@ function createTables() {
 		} ,
 		{
 			sql: `CREATE TABLE IF NOT EXISTS accounts (
-					account_no INT UNSIGNED PRIMARY KEY , 
+					account_no BIGINT UNSIGNED PRIMARY KEY , 
 					balance REAL DEFAULT 0.0 , 
 					account_type TINYINT UNSIGNED NOT NULL , 
 					card_id BIGINT UNSIGNED NOT NULL , 
@@ -49,7 +49,7 @@ function createTables() {
 					transaction_type TINYINT SIGNED NOT NULL , 
 					transaction_date TEXT DEFAULT CURRENT_TIMESTAMP , 
 					amount REAL NOT NULL ,
-					account_id INT UNSIGNED NOT NULL ,
+					account_id BIGINT UNSIGNED NOT NULL ,
 					FOREIGN KEY (account_id)
    						REFERENCES accounts(account_no)
   				        ON UPDATE CASCADE 

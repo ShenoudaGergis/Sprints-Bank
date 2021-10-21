@@ -1,12 +1,13 @@
 let moment           = require("moment");
 let generator        = require("creditcard-generator");
 let { getRandomInt , isDigitPlace } = require("../../utils/misc.js");
+let { cvv_length , account_number_length , card_expiry_years } = require("../../../config.js");
 
 //-----------------------------------------------------------------------------
 
 function Card(PIN) {
     this.network = "Mastercard";
-    this.years   = 5;
+    this.years   = card_expiry_years;
     this.PIN     = PIN;
 }
 
@@ -19,14 +20,14 @@ Card.prototype.getExpiryDate = function() {
 //-----------------------------------------------------------------------------
 
 Card.prototype.getCVV = function() {
-    return getRandomInt(1000 , 9999);
+    return getRandomInt(cvv_length);
 }
 
 //-----------------------------------------------------------------------------
 
 Card.prototype.getNumber = function() {
     let r = null;
-    while(isDigitPlace((r = generator.GenCC(this.network)[0]) , 7 , 0)) {}
+    while(isDigitPlace((r = generator.GenCC(this.network)[0]) , 16 - account_number_length , 0)) {}
     return r;
 }
 

@@ -15,11 +15,22 @@ function DB() {
             user     : username ,
             password : password ,
             port     : port ,
-            database : dbname
         })
         con.connect((err) => {
             if(err) return reject(err);
             else return resolve(con);
+        })
+    }).then((con) => {
+        return new Promise((resolve , reject) => {
+            con.query(`CREATE DATABASE IF NOT EXISTS ${dbname}` , (err) => {
+                if(err) return reject(err);
+                else {
+                    con.changeUser({database : dbname}, function(err) {
+                        if (err) return reject(err);
+                        else return resolve(con);
+                    });
+                }
+            })  
         })
     })
 }
@@ -99,14 +110,6 @@ DB.prototype.rollback = function() {
     return this.db.then(() => {
         return this.exec("ROLLBACK;" , []);
     });
-}
-
-//-----------------------------------------------------------------------------
-
-DB.prototype.turnoffAutocommit = function() {
-    return this.db.then(() => {
-        return this.exec("SET autocommit=0;" , []);
-    });    
 }
 
 //-----------------------------------------------------------------------------

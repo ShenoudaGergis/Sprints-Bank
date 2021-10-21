@@ -4,9 +4,9 @@ const {account_types , currency_after_point} = require("../../config.js");
 
 //-----------------------------------------------------------------------------
 
-function getRandomInt(min, max) {
-    min = Math.ceil(min);
-    max = Math.floor(max);
+function getRandomInt(digits) {
+    min = Math.ceil(Math.pow(10 , digits - 1));
+    max = Math.floor(Math.pow(10 , digits) - 1);
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 

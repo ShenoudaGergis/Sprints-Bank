@@ -4,7 +4,7 @@ let dbname = require("../../config.js")["mysql_dbname"];
 
 //-----------------------------------------------------------------------------
 
-function initTables() {
+function createTables() {
 	let tables = [
 		{
 			sql: `CREATE TABLE IF NOT EXISTS users (
@@ -78,29 +78,30 @@ function initTables() {
 
 //-----------------------------------------------------------------------------
 
-function initDatabase() {
+function createDatabase() {
     return db.exec(`CREATE DATABASE IF NOT EXISTS ${dbname}`);
 }
 
 //-----------------------------------------------------------------------------
 
+function useDatabase() {
+    return db.exec(`USE ${dbname}`);
+}
+
+//-----------------------------------------------------------------------------
+
 function init() {
-    return initDatabase().then(() => {
-        console.log(":: Database created");
-    }).then(() => {
-        return initTables();
-    }).then(() => {
-        console.log(":: Tables initialized");
-    } , (err) => {
-        console.log(":: Database initialization failed");
-        console.error(err);
-		throw err;
-    })
+	process.stdout.write(":: Selecting database ... ")
+	return useDatabase().then(() => {
+		process.stdout.write(" OK\n")
+		process.stdout.write(":: Creating tables    ... ")
+		return createTables();
+	}).then(() => {
+		process.stdout.write(" OK\n")
+	})
 }
 
 //-----------------------------------------------------------------------------
 
 
-init().then(() => {
-    console.log(":: All done");
-})
+init();

@@ -1,5 +1,5 @@
 let Card  = require("./card.js");
-let account_types = require("../../../config.js")["account_types"];
+let { account_types , account_number_length } = require("../../../config.js");
 
 //-----------------------------------------------------------------------------
 
@@ -12,7 +12,7 @@ function Account(balance , type , PIN) {
 //-----------------------------------------------------------------------------
 
 Account.prototype.getAccountNo = function() {
-    return this.card["number"].toString().substr(7)
+    return this.card["number"].toString().substr(16 - account_number_length);
 }
 
 //-----------------------------------------------------------------------------

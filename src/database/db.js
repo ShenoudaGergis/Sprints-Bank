@@ -15,19 +15,28 @@ function DB() {
         password : password ,
         port     : port ,
     });
-    
-    this.db = this.getConnection().then((con) => {
-        return new Promise((resolve , reject) => {
-            con.query(`CREATE DATABASE IF NOT EXISTS ${dbname}` , (err) => {
-                if(err) return reject(err);
-                else {
-                    con.changeUser({database : dbname}, function(err) {
-                        if (err) return reject(err);
-                        else return resolve(con);
-                    });
-                }
-            })    
-        })
+    this.db = this.getConnection();
+}
+
+//-----------------------------------------------------------------------------
+
+DB.prototype.createDB = function(con) {
+    return new Promise((resolve , reject) => {
+        con.query(`CREATE DATABASE IF NOT EXISTS ${dbname}` , (err) => {
+            if(err) return reject(err);
+            return resolve(con);
+        })       
+    });
+}
+
+//-----------------------------------------------------------------------------
+
+DB.prototype.useDB = function(con) {
+    return new Promise((resolve , reject) => {
+        con.changeUser({database : dbname}, function(err) {
+            if (err) return reject(err);
+            else return resolve(con);
+        });    
     });
 }
 
@@ -123,12 +132,16 @@ DB.prototype.getConnection = function() {
                 con.release();
                 return reject(err);
             } else {
-                con.on("error" , (err) => {
-                    console.log("Connection error ... reusing another");
-                    con.release();
-                    this.db = this.getConnection();
-                })
-                return resolve(con);
+                resolve(this.createDB(con).then((con) => {
+                    return this.useDB(con);
+                }).then((con) => {
+                    con.on("error" , (err) => {
+                        console.log("Connection error ... reusing another");
+                        con.release();
+                        this.db = this.getConnection();
+                    });
+                    return con;
+                }));
             }
         })
     });

@@ -1,6 +1,4 @@
 let db     = require("./db.js");
-let dbname = require("../../config.js")["mysql_dbname"];
-
 
 //-----------------------------------------------------------------------------
 
@@ -78,32 +76,14 @@ function createTables() {
 
 //-----------------------------------------------------------------------------
 
-function createDatabase() {
-    return db.exec(`CREATE DATABASE IF NOT EXISTS ${dbname}`);
-}
-
-//-----------------------------------------------------------------------------
-
-function useDatabase() {
-    return db.exec(`USE ${dbname}`);
-}
-
-//-----------------------------------------------------------------------------
-
 function init() {
-	process.stdout.write(":: Selecting database ... ")
-	return useDatabase().then(() => {
-		process.stdout.write(" OK\n")
-		process.stdout.write(":: Creating tables    ... ")
-		return createTables();
-	}).then(() => {
-		process.stdout.write(" OK\n")
-	})
+	return createTables();
 }
 
 //-----------------------------------------------------------------------------
 
 
 init().then(() => {
+	console.log(":: database initialized");
 	db.close();
 })

@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "description": "an online banking system",
   "scripts": {
-    "start": "node ./src/database/init.js & node ./main.js"
+    "start": "node ./src/database/init.js && node ./main.js"
   },
   "keywords": [
     "bank",

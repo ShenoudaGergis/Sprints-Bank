@@ -47,7 +47,7 @@ function createTables() {
 			sql: `CREATE TABLE IF NOT EXISTS transactions (
 					id MEDIUMINT UNSIGNED PRIMARY KEY AUTO_INCREMENT ,
 					transaction_type TINYINT SIGNED NOT NULL , 
-					transaction_date TEXT DEFAULT CURRENT_TIMESTAMP , 
+					transaction_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP , 
 					amount REAL NOT NULL ,
 					account_id BIGINT UNSIGNED NOT NULL ,
 					FOREIGN KEY (account_id)
@@ -104,4 +104,6 @@ function init() {
 //-----------------------------------------------------------------------------
 
 
-init();
+init().then(() => {
+	db.close();
+})

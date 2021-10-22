@@ -42,5 +42,5 @@ app.use(fallback);
 // });
 
 app.listen(port , () => {
-    console.log("jesus christ");    
+    console.log(`:: Starting server ... OK`);
 })

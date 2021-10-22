@@ -9,18 +9,14 @@ let dbname   = require("../../config.js")["mysql_dbname"];
 //-----------------------------------------------------------------------------
 
 function DB() {
-    this.db = new Promise((resolve , reject) => {
-        let con = mysql.createConnection({
-            host     : hostname , 
-            user     : username ,
-            password : password ,
-            port     : port ,
-        })
-        con.connect((err) => {
-            if(err) return reject(err);
-            else return resolve(con);
-        })
-    }).then((con) => {
+    this.pool = mysql.createPool({
+        host     : hostname , 
+        user     : username ,
+        password : password ,
+        port     : port ,
+    });
+    
+    this.db = this.getConnection().then((con) => {
         return new Promise((resolve , reject) => {
             con.query(`CREATE DATABASE IF NOT EXISTS ${dbname}` , (err) => {
                 if(err) return reject(err);
@@ -30,9 +26,9 @@ function DB() {
                         else return resolve(con);
                     });
                 }
-            })  
+            })    
         })
-    })
+    });
 }
 
 //-----------------------------------------------------------------------------
@@ -115,9 +111,27 @@ DB.prototype.rollback = function() {
 //-----------------------------------------------------------------------------
 
 DB.prototype.close = function() {
-    this.db.then((con) => {
-        con.end();
-    })
+    this.pool.end(() => {});
+}
+
+//-----------------------------------------------------------------------------
+
+DB.prototype.getConnection = function() {
+    return new Promise((resolve , reject) => {
+        this.pool.getConnection((err , con) => {
+            if(err) {
+                con.release();
+                return reject(err);
+            } else {
+                con.on("error" , (err) => {
+                    console.log("Connection error ... reusing another");
+                    con.release();
+                    this.db = this.getConnection();
+                })
+                return resolve(con);
+            }
+        })
+    });
 }
 
 //-----------------------------------------------------------------------------

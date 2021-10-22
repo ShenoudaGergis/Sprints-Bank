@@ -1,7 +1,7 @@
 let express       = require("express");
-let https         = require("https");
-let path          = require("path");
-let fs            = require("fs");
+// let https         = require("https");
+// let path          = require("path");
+// let fs            = require("fs");
 let userRouter    = require("./src/route/user.route.js"); 
 let accountRouter = require("./src/route/account.route.js");
 let validateJSON  = require("./src/middleware/validatejson.middleware.js");
@@ -14,7 +14,7 @@ let fallback      = require("./src/middleware/fallback.middleware.js");
 let log           = require("./src/middleware/log.middleware.js");
 let app           = express();
 let port          = require("./config.js")["server_port"];
-let cert_path     = require("./config.js")["cert_path"];
+// let cert_path     = require("./config.js")["cert_path"];
 
 
 //-----------------------------------------------------------------------------

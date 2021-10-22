@@ -196,9 +196,9 @@ For now, you can use the application locally by cloning the project in your loca
 run : `npm install` to install the required packages <br />
 run : `npm start` to initialize database tables and run server<br />
 
-Customer should first create a profile providing his personal info, then using a valid token he can then open an account with any amount of money. The account generated will be attached with a debit card, the card will have number , CVV and PIN. User can make any transactions using this info or with his account number and a valid authentication token  
+Customer should first create a profile providing his personal info, then using a valid token he can then open an account with any amount of money. The account generated will be attached with a debit card, the card will have number , CVV and PIN. User can make any transactions using this info or with his account number and a valid authentication token.  
       
-*The application will be hosted soon*
+The application is hosted on : https://sprints-bank-system.herokuapp.com/
       
 ## Configurations
 You can change the default configurations found in `config.js` file such as the `session_timeout` for each token generated in minutes

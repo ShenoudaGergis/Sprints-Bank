@@ -14,30 +14,9 @@ function DB() {
         user     : username ,
         password : password ,
         port     : port ,
+        database : dbname
     });
     this.db = this.getConnection();
-}
-
-//-----------------------------------------------------------------------------
-
-DB.prototype.createDB = function(con) {
-    return new Promise((resolve , reject) => {
-        con.query(`CREATE DATABASE IF NOT EXISTS ${dbname}` , (err) => {
-            if(err) return reject(err);
-            return resolve(con);
-        })       
-    });
-}
-
-//-----------------------------------------------------------------------------
-
-DB.prototype.useDB = function(con) {
-    return new Promise((resolve , reject) => {
-        con.changeUser({database : dbname}, function(err) {
-            if (err) return reject(err);
-            else return resolve(con);
-        });    
-    });
 }
 
 //-----------------------------------------------------------------------------
@@ -85,8 +64,8 @@ DB.prototype.fetchMany = function(sql , params = []) {
 
 //-----------------------------------------------------------------------------
 
-DB.prototype.affectedRows = function(sql , params = []) {
-    return this.db.then((con) => {
+DB.prototype.affectedRows = function() {
+    return this.db.then(() => {
         return this.fetchOne("SELECT ROW_COUNT() as c" , []).then((result) => {
             return ("c" in result) ? result["c"] : null;
         });
@@ -132,16 +111,12 @@ DB.prototype.getConnection = function() {
                 con.release();
                 return reject(err);
             } else {
-                resolve(this.createDB(con).then((con) => {
-                    return this.useDB(con);
-                }).then((con) => {
-                    con.on("error" , (err) => {
-                        console.log("Connection error ... reusing another");
-                        con.release();
-                        this.db = this.getConnection();
-                    });
-                    return con;
-                }));
+                con.on("error" , () => {
+                    console.log("Connection timeout ... reusing another");
+                    con.release();
+                    this.db = this.getConnection();
+                });
+                resolve(con);
             }
         })
     });

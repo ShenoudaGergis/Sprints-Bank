@@ -1,0 +1,2 @@
+[ INFO ] [ 2021-10-27T17:27:09 ] [ /user/register ] [ {"ssn":"2410373947227336","first_name":"mariam","last_name":"adra","email":"Gmail@com.com","password":"erWQ32#1","address":"road 3 nasr city","phone":"01023328864"} ] [ {} ] [ 200 ]
+[ INFO ] [ 2021-10-27T17:27:22 ] [ /user/register ] [ {"ssn":"2410373947227336","first_name":"mariam","last_name":"adra","email":"Gmail@com.com","password":"erWQ32#1","address":"road 3 nasr city","phone":"01023328864"} ] [ {} ] [ 403 ]

@@ -43,7 +43,6 @@ An online bank system built with node.js & express.js
     <td>
 <pre>
  {
-    "ssn"        : [number] ,
     "first_name" : [string] , 
     "last_name"  : [string] ,
     "email"      : [string] ,
@@ -58,9 +57,6 @@ An online bank system built with node.js & express.js
     <td><code>DELETE</code></td>
     <td>
  <pre>
- {
-    "ssn"        : [number]
- }
 </pre>
     </td>
   </tr>

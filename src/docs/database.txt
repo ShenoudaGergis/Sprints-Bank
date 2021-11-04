@@ -1,31 +1,38 @@
-- users
-	- first_name
-	- last_name
-	- email
-	= SSN 
-	- phone
-	- address
-	- password
 
-- accounts
-	- balance
-	- type
-	= account_no
-	- user_id	(users.SSN)
-	- card_id	(cards.id)
+- users
+	= SSN 
+	- first_name 
+	- last_name 
+	- email
+	- password
+	- phone 
+	- address 
 
 - cards
-	- network_type
-	= number
+	= number 
+	- network_type 
 	- expiry_date
-	- CVV
-	- PIN
+	- CVV 
+	- PIN 
+
+
+- accounts
+	= account_no 
+	- balance
+	- account_type 
+	- card_id	(cards.number) 
+	- user_id	(user.SSN)
+
 
 - transactions
 	= id
-	- transaction_type
+	- transaction_type 
 	- transaction_date
 	- amount
-	- account_id		(accounts.account_no)
+	- account_id	(accounts.account_no)
 
 
+- tokens
+	= token
+	- user_id	(users.SSN) 
+	- expiry_date

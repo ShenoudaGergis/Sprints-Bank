@@ -31,6 +31,12 @@ function getLogFileName() {
 
 //-----------------------------------------------------------------------------
 
+function getTestDate() {
+    return moment().format("YYYY:MM:DD HH:mm:ss");
+}
+
+//-----------------------------------------------------------------------------
+
 function getAccountTypeByNumber(n) {
     for(let type in account_types) {
         if(account_types[type] == n) return type;
@@ -82,4 +88,4 @@ function prepareObject(obj) {
 
 //-----------------------------------------------------------------------------
 
-module.exports = {getRandomInt , getToken , getTimestamp , getAccountTypeByNumber , getNumOfDigits , isDigitPlace , sumOperands , isObject , prepareObject , getLogFileName };
+module.exports = {getRandomInt , getToken , getTimestamp , getAccountTypeByNumber , getNumOfDigits , isDigitPlace , sumOperands , isObject , prepareObject , getLogFileName , getTestDate };

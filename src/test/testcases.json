@@ -1,0 +1,41 @@
+{
+    "protocol"   : "https:" ,
+    "hostname"   : "sprints-bank-system.herokuapp.com" ,
+    "cases"      : [
+        {   
+            "path"       : "/user/register" ,
+            "method"     : "POST" ,
+            "body"       :  {
+                "ssn"        : 3419857420912425 ,
+                "first_name" : "first" , 
+                "last_name"  : "last" ,
+                "email"      : "email@gmail.com" ,
+                "password"   : "341asdAS@" ,
+                "address"    : "asd asd asd" ,
+                "phone"      : "01025523329" 
+            }, 
+            "headers"    : {
+                "content-type" : "application/json"
+            }
+        } ,
+        {   
+            "path"       : "/user/delete" ,
+            "method"     : "DELETE" ,
+            "body"       :  {}, 
+            "headers"    : {
+                "content-type" : "application/json"
+            }
+        } ,      
+        {   
+            "path"       : "/user/auth" ,
+            "method"     : "POST" ,
+            "body"       :  {
+                "email" : "jesuschrist@gmail.com" ,
+                "password" : "341asdAS@"
+            }, 
+            "headers"    : {
+                "content-type" : "application/json"
+            }
+        }
+    ]
+}
